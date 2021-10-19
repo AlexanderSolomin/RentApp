@@ -1,3 +1,3 @@
-# template-repo
+# RentApp
 
-Template repo for all the projects
+Web API + Blazor Webassembly App
