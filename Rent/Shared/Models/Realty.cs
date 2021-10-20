@@ -16,7 +16,6 @@ namespace Rent.Shared.Models
         public Status Status { get; set; }
         public Category Category { get; set; }
         public City City { get; set; }
-        public District District { get; set; }
         public ApplicationUser Owner { get; set; }
         public string ImgPath { get; set; }
     }

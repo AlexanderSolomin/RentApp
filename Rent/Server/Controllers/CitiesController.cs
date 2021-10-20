@@ -14,19 +14,19 @@ namespace Rent.Server.Controllers
     [ApiController]
     public class CitiesController : ControllerBase
     {
-        private readonly IRepository<City> _repository;
+        private readonly IAppRepository<City> _repository;
 
-        public CitiesController(IRepository<City> repository)
+        public CitiesController(IAppRepository<City> repository)
         {
             this._repository = repository;
         }
-        // GET: api/City
+        // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetCities()
+        public async Task<ActionResult> GetCities(int skip = 0, int take = 5)
         {
             try
             {
-                return Ok(await _repository.List());
+                return Ok(await _repository.List(skip, take));
 
             }
             catch (Exception)

@@ -37,9 +37,9 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<City>> List()
+        public async Task<AppDataResult<City>> List(int skip = 0, int take = 5)
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<City>>("api/cities");
+            return await _httpClient.GetFromJsonAsync<AppDataResult<City>>($"api/cities?skip={skip}&take={take}");
         }
 
         public Task<IEnumerable<City>> List(Expression<Func<City, bool>> predicate)

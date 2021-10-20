@@ -11,19 +11,19 @@ namespace Rent.Server.Controllers
     [ApiController]
     public class DealsController : ControllerBase
     {
-        private readonly IRepository<Deal> _repository;
+        private readonly IAppRepository<Deal> _repository;
 
-        public DealsController(IRepository<Deal> repository)
+        public DealsController(IAppRepository<Deal> repository)
         {
             this._repository = repository;
         }
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetDeals()
+        public async Task<ActionResult> GetDeals(int skip = 0, int take = 5)
         {
             try
             {
-                return Ok(await _repository.List());
+                return Ok(await _repository.List(skip, take));
             }
             catch (Exception)
             {

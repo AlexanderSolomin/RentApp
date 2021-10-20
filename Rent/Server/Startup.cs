@@ -28,7 +28,8 @@ namespace Rent.Server
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"))
+                    .EnableSensitiveDataLogging());
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -41,7 +42,7 @@ namespace Rent.Server
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
 
             services.AddControllersWithViews();
             services.AddRazorPages();

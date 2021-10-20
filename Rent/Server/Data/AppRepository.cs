@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Rent.Shared.Models;
+using System.Linq.Expressions;
 
 namespace Rent.Server.Data
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class AppRepository<T> : IAppRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public Repository(ApplicationDbContext dbContext)
+        public AppRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -26,12 +27,17 @@ namespace Rent.Server.Data
             return await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Name == name);
         }
 
-        public virtual async Task<IEnumerable<T>> List()
+        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            AppDataResult<T> result = new AppDataResult<T>()
+            {
+                Result = _dbContext.Set<T>().Skip(skip).Take(take),
+                Count = await _dbContext.Set<T>().CountAsync()
+            };
+            return result;
         }
 
-        public virtual async Task<IEnumerable<T>> List(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate)
         {
             return await _dbContext.Set<T>()
                    .Where(predicate)

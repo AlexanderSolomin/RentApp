@@ -37,9 +37,9 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<T>> List()
+        public async Task<AppDataResult<T>> List(int skip = 0, int take = 5)
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<T>>($"");
+            return await _httpClient.GetFromJsonAsync<AppDataResult<T>>($"");
         }   
 
         public Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate)

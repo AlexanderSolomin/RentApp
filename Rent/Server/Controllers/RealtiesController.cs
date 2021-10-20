@@ -13,19 +13,19 @@ namespace Rent.Server.Controllers
     [ApiController]
     public class RealtiesController : ControllerBase
     {
-        private readonly IRepository<Realty> _repository;
+        private readonly IAppRepository<Realty> _repository;
 
-        public RealtiesController(IRepository<Realty> repository)
+        public RealtiesController(IAppRepository<Realty> repository)
         {
             this._repository = repository;
         }
         // GET: api/Realties
         [HttpGet]
-        public async Task<ActionResult> GetRealties()
+        public async Task<ActionResult> GetRealties(int skip = 0, int take = 5)
         {
             try
             {
-                return Ok(await _repository.List());
+                return Ok(await _repository.List(skip, take));
 
             }
             catch (Exception)

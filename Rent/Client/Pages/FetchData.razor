@@ -1,9 +1,41 @@
 ﻿@page "/fetchdata"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using Rent.Shared.Models
 @attribute [Authorize]
 
-@inject HttpClient Http
+@* @inject IService<City> Service *@
+
+<h1>Города</h1>
 
 
+    <SfGrid TValue="City" AllowPaging="true" AllowSorting="true" AllowSelection="true">
+        <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AppDataAdaptor<City>)"></SfDataManager>
+        <GridPageSettings PageSize="5" PageSizes="@pagerDropdown" PageCount="3"></GridPageSettings>
+        <GridColumns>
+            <GridColumn Field=@nameof(City.Id) HeaderText="ID"></GridColumn>
+            <GridColumn Field=@nameof(City.Name) HeaderText="Наименование"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+
+@code{
+    public string[] pagerDropdown { get; set; } = new string[] {"All", "5", "10", "20" };
+}
+
+@* @code{
+
+    public List<City> cities { get; set; }
+    public bool SpinnerVisible { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SpinnerVisible = true;
+            cities = (await Service.List()).ToList();
+            SpinnerVisible = false;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+} *@
