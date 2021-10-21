@@ -37,7 +37,7 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public async Task<AppDataResult<T>> List(int skip = 0, int take = 5)
+        public async Task<AppDataResult<T>> List(int skip = 0, int take = 5, string orderBy = "Name")
         {
             return await _httpClient.GetFromJsonAsync<AppDataResult<T>>($"");
         }   

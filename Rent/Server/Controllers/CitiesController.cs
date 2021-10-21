@@ -22,12 +22,11 @@ namespace Rent.Server.Controllers
         }
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetCities(int skip = 0, int take = 5)
+        public async Task<ActionResult> GetCities(int skip = 0, int take = 5, string orderBy = "Name")
         {
             try
             {
-                return Ok(await _repository.List(skip, take));
-
+                return Ok(await _repository.List(skip, take, orderBy));
             }
             catch (Exception)
             {
@@ -94,7 +93,8 @@ namespace Rent.Server.Controllers
                 {
                     return NotFound($"City with name {name} not found");
                 }
-                return await _repository.Edit(city);
+                
+                return Ok(await _repository.Edit(city));
             }
             catch (Exception)
             {
@@ -104,7 +104,7 @@ namespace Rent.Server.Controllers
         }
 
 
-        // DELETE: api/City/5
+        // DELETE:
         [HttpDelete("{name}")]
         public async Task<ActionResult> DeleteCity(string name)
         {

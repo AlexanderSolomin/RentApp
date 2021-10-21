@@ -1,6 +1,7 @@
 ﻿using Rent.Shared.Models;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -11,9 +12,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Rent.Server.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class AppDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
+        public AppDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
@@ -21,6 +22,7 @@ namespace Rent.Server.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Deal> Deals { get; set; }
         public DbSet<Realty> Realties { get; set; }
+
     }
 }
 

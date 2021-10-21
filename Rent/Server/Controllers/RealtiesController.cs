@@ -21,12 +21,11 @@ namespace Rent.Server.Controllers
         }
         // GET: api/Realties
         [HttpGet]
-        public async Task<ActionResult> GetRealties(int skip = 0, int take = 5)
+        public async Task<ActionResult> GetRealties(int skip = 0, int take = 5, string orderBy = "Name")
         {
             try
             {
-                return Ok(await _repository.List(skip, take));
-
+                return Ok(await _repository.List(skip, take, orderBy));
             }
             catch (Exception)
             {
@@ -40,7 +39,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                return Ok(await _repository.GetByName(name));
+                return  Ok(await _repository.GetByName(name));
 
             }
             catch (Exception)
@@ -92,7 +91,8 @@ namespace Rent.Server.Controllers
                 {
                     return NotFound($"Realty with name {name} not found");
                 }
-                return await _repository.Edit(realtyToUpdate);
+                await _repository.Edit(realtyToUpdate);
+                return Ok(await _repository.GetByName(name));
             }
             catch (Exception)
             {

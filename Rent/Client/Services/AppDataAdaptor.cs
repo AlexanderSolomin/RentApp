@@ -17,7 +17,14 @@ namespace Rent.Client.Services
         }
         public override async Task<object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
         {
-            AppDataResult<T> result = await _service.List(dataManagerRequest.Skip, dataManagerRequest.Take);
+            string orderByString = null;
+            if(dataManagerRequest.Sorted != null)
+            {
+                List<Sort> sortList = dataManagerRequest.Sorted;
+                sortList.Reverse();
+                orderByString = string.Join(",", sortList.Select(s => string.Format("{0} {1}", s.Name, s.Direction)));
+            }
+            AppDataResult<T> result = await _service.List(dataManagerRequest.Skip, dataManagerRequest.Take, orderByString);
             DataResult dataResult = new DataResult()
             {
                 Result = result.Result,

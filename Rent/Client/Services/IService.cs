@@ -10,7 +10,7 @@ namespace Rent.Client.Services
     {
         Task<T> GetById(Guid id);
         Task<T> GetByName(string name);
-        Task<AppDataResult<T>> List(int skip, int take);
+        Task<AppDataResult<T>> List(int skip, int take, string orderBy);
         Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate);
         Task<T> Add(T entity);
         Task Delete(T entity);

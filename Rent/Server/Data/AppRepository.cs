@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Rent.Shared.Models;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 
 namespace Rent.Server.Data
 {
     public class AppRepository<T> : IAppRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly AppDbContext _dbContext;
 
-        public AppRepository(ApplicationDbContext dbContext)
+        public AppRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -27,11 +28,11 @@ namespace Rent.Server.Data
             return await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Name == name);
         }
 
-        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5)
+        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5, string orderBy = "Name")
         {
             AppDataResult<T> result = new AppDataResult<T>()
             {
-                Result = _dbContext.Set<T>().Skip(skip).Take(take),
+                Result = _dbContext.Set<T>().OrderBy(orderBy).Skip(skip).Take(take),
                 Count = await _dbContext.Set<T>().CountAsync()
             };
             return result;
@@ -53,13 +54,9 @@ namespace Rent.Server.Data
 
         public async Task<T> Edit(T entity)
         {
-            var result = await _dbContext.Set<T>().FindAsync(entity);
-            if (result != null)
-            {
-                result = entity;
-                _dbContext.Entry(entity).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-            }
+            var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Name == entity.Name);
+            _dbContext.Entry(result).CurrentValues.SetValues(entity);
+            await _dbContext.SaveChangesAsync();
             return result;
         }
 

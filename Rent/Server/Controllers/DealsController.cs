@@ -19,11 +19,11 @@ namespace Rent.Server.Controllers
         }
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetDeals(int skip = 0, int take = 5)
+        public async Task<ActionResult> GetDeals(int skip = 0, int take = 5, string orderBy = "Name")
         {
             try
             {
-                return Ok(await _repository.List(skip, take));
+                return Ok(await _repository.List(skip, take, orderBy));
             }
             catch (Exception)
             {
@@ -90,7 +90,8 @@ namespace Rent.Server.Controllers
                 {
                     return NotFound($"Deal with name {name} not found");
                 }
-                return await _repository.Edit(deal);
+                await _repository.Edit(deal);
+                return await _repository.GetByName(name);
             }
             catch (Exception)
             {

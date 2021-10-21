@@ -1,41 +1,44 @@
 ﻿@page "/fetchdata"
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 
-@* @inject IService<City> Service *@
 
 <h1>Города</h1>
+@{
+}
 
-
-    <SfGrid TValue="City" AllowPaging="true" AllowSorting="true" AllowSelection="true">
+    <SfGrid @ref="CityGrid" TValue="City" AllowPaging="true" AllowSorting="true">
         <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AppDataAdaptor<City>)"></SfDataManager>
+        <SfToolbar>
+            <ToolbarItems>
+                <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
+                    <Template>
+                        <SfTextBox Placeholder="Поиск" Input="OnInput"></SfTextBox>
+                    </Template>
+                </ToolbarItem>
+            </ToolbarItems>
+        </SfToolbar>
+        
         <GridPageSettings PageSize="5" PageSizes="@pagerDropdown" PageCount="3"></GridPageSettings>
+        <GridFilterSettings Mode="FilterBarMode.Immediate" ImmediateModeDelay="200"></GridFilterSettings>
+        <GridSortSettings AllowUnsort="false">
+            <GridSortColumns>
+                <GridSortColumn Field="Name"></GridSortColumn>
+            </GridSortColumns>
+        </GridSortSettings>
         <GridColumns>
-            <GridColumn Field=@nameof(City.Id) HeaderText="ID"></GridColumn>
             <GridColumn Field=@nameof(City.Name) HeaderText="Наименование"></GridColumn>
+            <GridColumn Field=@nameof(City.Subject) HeaderText="Субъект"></GridColumn>
+            <GridColumn AllowSorting="false" Field=@nameof(City.District) HeaderText="Регион"></GridColumn>
+            <GridColumn Field=@nameof(City.Population) HeaderText="Население"></GridColumn>
         </GridColumns>
     </SfGrid>
 
 @code{
+    public SfGrid<City> CityGrid { get; set; }
     public string[] pagerDropdown { get; set; } = new string[] {"All", "5", "10", "20" };
-}
-
-@* @code{
-
-    public List<City> cities { get; set; }
-    public bool SpinnerVisible { get; set; }
-    protected override async Task OnInitializedAsync()
+    private async void OnInput(InputEventArgs args)
     {
-        try
-        {
-            SpinnerVisible = true;
-            cities = (await Service.List()).ToList();
-            SpinnerVisible = false;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        await this.CityGrid.SearchAsync(args.Value);
     }
-} *@
+}
