@@ -23,12 +23,12 @@ namespace Rent.Server.Data
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public virtual async Task<T> GetByName(string name)
+        public virtual async Task<T> GetByTitle(string title)
         {
-            return await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Name == name);
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Title == title);
         }
 
-        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5, string orderBy = "Name")
+        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5, string orderBy = "Title")
         {
             AppDataResult<T> result = new AppDataResult<T>()
             {
@@ -54,7 +54,7 @@ namespace Rent.Server.Data
 
         public async Task<T> Edit(T entity)
         {
-            var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Name == entity.Name);
+            var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Title == entity.Title);
             _dbContext.Entry(result).CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
             return result;

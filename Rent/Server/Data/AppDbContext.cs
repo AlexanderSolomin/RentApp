@@ -22,7 +22,8 @@ namespace Rent.Server.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Deal> Deals { get; set; }
         public DbSet<Realty> Realties { get; set; }
-
+        public DbSet<UserFeedback> UserFeedbacks { get; set; }
+        public DbSet<RealtyFeedback> RealtyFeedbacks { get; set; }
     }
 }
 

@@ -23,11 +23,11 @@
         <GridFilterSettings Mode="FilterBarMode.Immediate" ImmediateModeDelay="200"></GridFilterSettings>
         <GridSortSettings AllowUnsort="false">
             <GridSortColumns>
-                <GridSortColumn Field="Name"></GridSortColumn>
+                <GridSortColumn Field="Title"></GridSortColumn>
             </GridSortColumns>
         </GridSortSettings>
         <GridColumns>
-            <GridColumn Field=@nameof(City.Name) HeaderText="Наименование"></GridColumn>
+            <GridColumn Field=@nameof(City.Title) HeaderText="Наименование"></GridColumn>
             <GridColumn Field=@nameof(City.Subject) HeaderText="Субъект"></GridColumn>
             <GridColumn AllowSorting="false" Field=@nameof(City.District) HeaderText="Регион"></GridColumn>
             <GridColumn Field=@nameof(City.Population) HeaderText="Население"></GridColumn>

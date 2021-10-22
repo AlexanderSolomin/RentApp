@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using Rent.Server.Data;
 using Rent.Shared.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Rent.Server
 {
@@ -31,9 +32,14 @@ namespace Rent.Server
                     Configuration.GetConnectionString("DefaultConnection"))
                     .EnableSensitiveDataLogging());
 
+            // services.AddDbContext<AppDbContext>(options =>
+            //     options.UseMySQL(
+            //         Configuration.GetConnectionString("MySqlConnection"))
+            //         .EnableSensitiveDataLogging());
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddIdentityServer()
@@ -49,21 +55,23 @@ namespace Rent.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
+                logger.LogInformation("In Development.");
             }
             else
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                logger.LogInformation("Not Development.");
             }
-
+        
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();

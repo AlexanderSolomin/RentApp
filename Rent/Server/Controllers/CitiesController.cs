@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rent.Server.Data;
 using Rent.Shared.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Rent.Server.Controllers
 {
@@ -15,39 +16,43 @@ namespace Rent.Server.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly IAppRepository<City> _repository;
-
-        public CitiesController(IAppRepository<City> repository)
+        private readonly ILogger<City> _logger;
+        public CitiesController(ILogger<City> logger, IAppRepository<City> repository)
         {
+            this._logger = logger;
             this._repository = repository;
         }
+        
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetCities(int skip = 0, int take = 5, string orderBy = "Name")
+        public async Task<ActionResult> GetCities(int skip = 0, int take = 5, string orderBy = "Title")
         {
             try
             {
                 return Ok(await _repository.List(skip, take, orderBy));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while getAllParametred: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from server");
+                    $"Error retriving data from server: {ex.Message}");
             }
         }
 
         // GET: 
         [HttpGet("{name}")]
-        public async Task<ActionResult> GetCityByName(string name)
+        public async Task<ActionResult> GetCityByTitle(string title)
         {
             try
             {
-                return Ok(await _repository.GetByName(name));
+                return Ok(await _repository.GetByTitle(title));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while getByName: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retriving data from server");
+                    $"Error retriving data from server: {ex.Message}");
             }
         }
 
@@ -61,45 +66,47 @@ namespace Rent.Server.Controllers
                 {
                     return BadRequest();
                 }
-                var nameExists = await _repository.GetByName(city.Name);
+                var nameExists = await _repository.GetByTitle(city.Title);
                 if (nameExists != null)
                 {
-                    ModelState.AddModelError("Name", "Name exist");
+                    ModelState.AddModelError("Title", "Title exists");
                     return BadRequest(ModelState);
                 }
                 var addedCity = await _repository.Add(city);
-                return CreatedAtAction(nameof(GetCities),
-                     new { id = Guid.NewGuid().ToString() }, addedCity);
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} New city GUID {city.Id} added");
+                return CreatedAtAction(nameof(GetCities), addedCity);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while add to DB: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error adding to DB");
+                    $"Error adding to DB: {ex.Message}");
             }
         }
 
         // PUT:
-        [HttpPut("{name}")]
-        public async Task<ActionResult<City>> PutCity(string name, City city)
+        [HttpPut("{title}")]
+        public async Task<ActionResult<City>> PutCity(string title, City city)
         {
             try
             {
-                if (name != city.Name)
+                if (title != city.Title)
                 {
                     return BadRequest("Name mismatch");
                 }
-                var cityToUpdate = await _repository.GetByName(name);
+                var cityToUpdate = await _repository.GetByTitle(title);
                 if (cityToUpdate == null)
                 {
-                    return NotFound($"City with name {name} not found");
+                    return NotFound($"City with name {title} not found");
                 }
                 
                 return Ok(await _repository.Edit(city));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occuried while put: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating city");
+                    $"Error updating city: {ex.Message}");
             }
         }
 
@@ -110,18 +117,20 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var cityToDelete = await _repository.GetByName(name);
+                var cityToDelete = await _repository.GetByTitle(name);
                 if (cityToDelete == null)
                 {
                     return NotFound($"City with name {name} not found");
                 }
                 await _repository.Delete(cityToDelete);
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} City with GUID {cityToDelete.Id} deleted");
                 return Ok($"City with name {name} deleted");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occuried while delete: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting city");
+                    $"Error deleting city: {ex.Message}");
             }
         }
     }
