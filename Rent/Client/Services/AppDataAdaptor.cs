@@ -15,22 +15,23 @@ namespace Rent.Client.Services
         {
             this._service = _service;
         }
-        public override async Task<object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
-        {
-            string orderByString = null;
-            if(dataManagerRequest.Sorted != null)
-            {
-                List<Sort> sortList = dataManagerRequest.Sorted;
-                sortList.Reverse();
-                orderByString = string.Join(",", sortList.Select(s => string.Format("{0} {1}", s.Name, s.Direction)));
-            }
-            AppDataResult<T> result = await _service.List(dataManagerRequest.Skip, dataManagerRequest.Take, orderByString);
-            DataResult dataResult = new DataResult()
-            {
-                Result = result.Result,
-                Count = result.Count
-            };
-            return dataResult;
-        }
+        // public override async Task<object> ReadAsync(DataManagerRequest dataManagerRequest, string key = null)
+        // {
+        //     string orderByString = null;
+        //     if(dataManagerRequest.Sorted != null)
+        //     {
+        //         List<Sort> sortList = dataManagerRequest.Sorted;
+        //         sortList.Reverse();
+        //         orderByString = string.Join(",", sortList.Select(s => string.Format("{0} {1}", s.Name, s.Direction)));
+        //     }
+        
+        //     AppDataResult<T> result = await _service.List(dataManagerRequest.Skip, dataManagerRequest.Take, orderByString);
+        //     DataResult dataResult = new DataResult()
+        //     {
+        //         Result = result.Result,
+        //         Count = result.Count
+        //     };
+        //     return dataResult;
+        // }
     }
 }

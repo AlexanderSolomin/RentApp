@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Rent.Shared.Models;
+using Rent.Shared.Request;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 
@@ -23,19 +24,20 @@ namespace Rent.Server.Data
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public virtual async Task<T> GetByTitle(string title)
-        {
-            return await _dbContext.Set<T>().FirstOrDefaultAsync(n => n.Title == title);
-        }
-
-        public virtual async Task<AppDataResult<T>> List(int skip = 0, int take = 5, string orderBy = "Title")
+        public virtual async Task<AppDataResult<T>> GetByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title")
         {
             AppDataResult<T> result = new AppDataResult<T>()
             {
-                Result = _dbContext.Set<T>().OrderBy(orderBy).Skip(skip).Take(take),
-                Count = await _dbContext.Set<T>().CountAsync()
+                Result = await _dbContext.Set<T>().Where(e => e.Title.Contains(title)).OrderBy(orderBy).Skip(skip).Take(take).ToListAsync(),
+                Count = await _dbContext.Set<T>().Where(e => e.Title.Contains(title)).CountAsync()
             };
             return result;
+        }
+
+        public virtual async Task<PagedList<T>> List(PagingParameters pagedParameters)
+        {
+            var result = await _dbContext.Set<T>().ToListAsync();
+            return PagedList<T>.ToPagedList(result, pagedParameters.PageNumber, pagedParameters.PageSize);
         }
 
         public virtual async Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate)

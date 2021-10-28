@@ -32,11 +32,6 @@ namespace Rent.Server
                     Configuration.GetConnectionString("DefaultConnection"))
                     .EnableSensitiveDataLogging());
 
-            // services.AddDbContext<AppDbContext>(options =>
-            //     options.UseMySQL(
-            //         Configuration.GetConnectionString("MySqlConnection"))
-            //         .EnableSensitiveDataLogging());
-
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -49,6 +44,14 @@ namespace Rent.Server
                 .AddIdentityServerJwt();
 
             services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+            services.AddCors(policy =>
+                    {
+                        policy.AddPolicy("CorsPolicy", opt => opt
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithExposedHeaders("X-Pagination"));
+                    });
 
             services.AddControllersWithViews();
             services.AddRazorPages();

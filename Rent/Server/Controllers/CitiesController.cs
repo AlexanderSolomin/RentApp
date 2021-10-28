@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rent.Server.Data;
 using Rent.Shared.Models;
+using Rent.Shared.Request;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Rent.Server.Controllers
 {
@@ -25,32 +27,53 @@ namespace Rent.Server.Controllers
         
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetCities(int skip = 0, int take = 5, string orderBy = "Title")
+        public async Task<ActionResult> GetCities([FromQuery] PagingParameters pagingParameters)
         {
             try
             {
-                return Ok(await _repository.List(skip, take, orderBy));
+                var result = await _repository.List(pagingParameters);
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+                _logger.LogInformation($"{DateTime.Now}: Queried all the cities");
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while getAllParametred: {ex.Message}");
+                _logger.LogInformation($"{DateTime.Now}: Error occured while getAllParametred: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error retriving data from server: {ex.Message}");
             }
         }
 
         // GET: 
-        [HttpGet("{name}")]
-        public async Task<ActionResult> GetCityByTitle(string title)
+        [HttpGet("{title}")]
+        public async Task<ActionResult> GetCityByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title")
         {
             try
             {
+                _logger.LogInformation($"{DateTime.Now}: Getting city by title");
                 return Ok(await _repository.GetByTitle(title));
 
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while getByName: {ex.Message}");
+                _logger.LogInformation($"{DateTime.Now}: Error occured while getByTitle: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Error retriving data from server: {ex.Message}");
+            }
+        }
+
+        // GET: 
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult> GetCityById(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Getting city by ID");
+                return Ok(await _repository.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation($"{DateTime.Now}: Error occured while getById: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error retriving data from server: {ex.Message}");
             }
@@ -78,33 +101,33 @@ namespace Rent.Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occured while add to DB: {ex.Message}");
+                _logger.LogInformation($"{DateTime.Now}: Error occured while add to DB: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error adding to DB: {ex.Message}");
             }
         }
 
         // PUT:
-        [HttpPut("{title}")]
-        public async Task<ActionResult<City>> PutCity(string title, City city)
+        [HttpPut("{id:Guid}")]
+        public async Task<ActionResult<City>> PutCity(Guid id, City city)
         {
             try
             {
-                if (title != city.Title)
+                if (id != city.Id)
                 {
-                    return BadRequest("Name mismatch");
+                    return BadRequest("Id mismatch");
                 }
-                var cityToUpdate = await _repository.GetByTitle(title);
+                var cityToUpdate = await _repository.GetById(id);
                 if (cityToUpdate == null)
                 {
-                    return NotFound($"City with name {title} not found");
+                    return NotFound($"City with ID {id} not found");
                 }
                 
                 return Ok(await _repository.Edit(city));
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occuried while put: {ex.Message}");
+                _logger.LogInformation($"{DateTime.Now}: Error occuried while put: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error updating city: {ex.Message}");
             }
@@ -112,23 +135,23 @@ namespace Rent.Server.Controllers
 
 
         // DELETE:
-        [HttpDelete("{name}")]
-        public async Task<ActionResult> DeleteCity(string name)
+        [HttpDelete("{id:Guid}")]
+        public async Task<ActionResult> DeleteCity(Guid id)
         {
             try
             {
-                var cityToDelete = await _repository.GetByTitle(name);
+                var cityToDelete = await _repository.GetById(id);
                 if (cityToDelete == null)
                 {
-                    return NotFound($"City with name {name} not found");
+                    return NotFound($"City with ID {id} not found");
                 }
                 await _repository.Delete(cityToDelete);
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} City with GUID {cityToDelete.Id} deleted");
-                return Ok($"City with name {name} deleted");
+                _logger.LogInformation($"{DateTime.Now}: City with GUID {cityToDelete.Id} deleted");
+                return Ok($"City with Id {id} deleted");
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} Error occuried while delete: {ex.Message}");
+                _logger.LogInformation($"{DateTime.Now}: Error occuried while delete: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"Error deleting city: {ex.Message}");
             }

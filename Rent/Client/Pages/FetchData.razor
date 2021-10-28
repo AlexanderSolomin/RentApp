@@ -1,44 +1,60 @@
 ﻿@page "/fetchdata"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+@inject IService<City> CityService
 
 
 <h1>Города</h1>
-@{
+@{ 
 }
-
-    <SfGrid @ref="CityGrid" TValue="City" AllowPaging="true" AllowSorting="true">
+    <SfGrid TValue="City" AllowPaging="true" AllowSorting="true" >
         <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AppDataAdaptor<City>)"></SfDataManager>
-        <SfToolbar>
-            <ToolbarItems>
-                <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
-                    <Template>
-                        <SfTextBox Placeholder="Поиск" Input="OnInput"></SfTextBox>
-                    </Template>
-                </ToolbarItem>
-            </ToolbarItems>
-        </SfToolbar>
-        
-        <GridPageSettings PageSize="5" PageSizes="@pagerDropdown" PageCount="3"></GridPageSettings>
-        <GridFilterSettings Mode="FilterBarMode.Immediate" ImmediateModeDelay="200"></GridFilterSettings>
+        <GridPageSettings PageSize="5" PageSizes="@pagerDropdown" PageCount="3"></GridPageSettings> 
         <GridSortSettings AllowUnsort="false">
             <GridSortColumns>
                 <GridSortColumn Field="Title"></GridSortColumn>
             </GridSortColumns>
         </GridSortSettings>
-        <GridColumns>
-            <GridColumn Field=@nameof(City.Title) HeaderText="Наименование"></GridColumn>
-            <GridColumn Field=@nameof(City.Subject) HeaderText="Субъект"></GridColumn>
-            <GridColumn AllowSorting="false" Field=@nameof(City.District) HeaderText="Регион"></GridColumn>
-            <GridColumn Field=@nameof(City.Population) HeaderText="Население"></GridColumn>
-        </GridColumns>
+
+            <SfToolbar>
+                <ToolbarItems>
+                    <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
+                        <Template>
+                            <SfTextBox @ref="searchTextBox" Placeholder="Search"></SfTextBox>
+                        </Template>
+                    </ToolbarItem>
+                    <ToolbarItem Type="ItemType.Button" Align="ItemAlign.Right">
+                        <Template>
+                            <SfButton Content="Search" OnClick="@SearchClick"></SfButton>
+                        </Template>
+                    </ToolbarItem>
+                </ToolbarItems>
+            </SfToolbar>
+
+            <GridColumns>
+                <GridColumn Field=@nameof(City.Title) HeaderText="Наименование"></GridColumn>
+                <GridColumn Field=@nameof(City.Subject) HeaderText="Субъект"></GridColumn>
+                <GridColumn Field=@nameof(City.District) HeaderText="Регион"></GridColumn>
+                <GridColumn Field=@nameof(City.Population) HeaderText="Население"></GridColumn>
+            </GridColumns>
     </SfGrid>
 
 @code{
-    public SfGrid<City> CityGrid { get; set; }
     public string[] pagerDropdown { get; set; } = new string[] {"All", "5", "10", "20" };
-    private async void OnInput(InputEventArgs args)
+    public AppDataResult<City> cities { get; set; }
+    public SfGrid<City> cityGrid { get; set; }
+    public SfTextBox searchTextBox { get; set;}
+    @* protected override async Task OnInitializedAsync()
     {
-        await this.CityGrid.SearchAsync(args.Value);
+        cityGrid = await CityService.;
+    } *@
+    @* private async void OnInput(InputEventArgs args)
+    {
+        await this.cities.SearchAsync(args.Value);
+    }  *@
+
+        private async void SearchClick()
+    {
+        await this.cityGrid.SearchAsync(searchTextBox.Value);
     }
 }
