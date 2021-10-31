@@ -34,13 +34,13 @@ namespace Rent.Server.Data
             return result;
         }
 
-        public virtual async Task<PagedList<T>> List(PagingParameters pagedParameters)
+        public virtual async Task<PagedList<T>> GetAll(PagingParameters pagedParameters)
         {
             var result = await _dbContext.Set<T>().ToListAsync();
             return PagedList<T>.ToPagedList(result, pagedParameters.PageNumber, pagedParameters.PageSize);
         }
 
-        public virtual async Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate)
         {
             return await _dbContext.Set<T>()
                    .Where(predicate)

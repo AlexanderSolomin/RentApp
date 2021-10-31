@@ -1,34 +1,44 @@
 @page "/cities"
+@attribute [Authorize]
 @inject IService<City> CityService
 
 <div class="row">
     <div class="col-md-10">
-        @*Place for search and sort*@
-    </div>
-    <div class="col-md-2">
-        <a href="/createProduct">Create Product</a>
+        @*search and sort*@
     </div>
 </div>
 <div class="row">
-    <div class="col">
-        @*Place for products*@
-    </div>
+    <CityTable Cities="CitiesList" />
 </div>
 <div class="row">
     <div class="col">
-        @*Place for pagination*@
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
     </div>
+</div>
+<div class="col-md-2">
+    <a href="/createCity">Создать</a>
 </div>
 
-@code{
-	@* public List<City> CitiesList { get; set; } = new List<City>();
-	protected async override Task OnInitializedAsync()
+@code {
+    public List<City> CitiesList { get; set; } = new List<City>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private PagingParameters _pagingParameters = new PagingParameters();
+
+    protected async override Task OnInitializedAsync()
     {
-        CitiesList = await CityService.List();
-        //just for testing
-        foreach (var city in CitiesList)
-        {
-            Console.WriteLine(city.Title);
-        }
-    } *@
+        await GetCities();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _pagingParameters.PageNumber = page;
+        await GetCities();
+    }
+
+    private async Task GetCities()
+    {
+        var pagingResponse = await CityService.GetAll(_pagingParameters);
+        CitiesList = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
 }

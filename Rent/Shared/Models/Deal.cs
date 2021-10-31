@@ -13,9 +13,9 @@ namespace Rent.Shared.Models
         [Required]
         public int RentPerMonth { get; set; }
         [Required]
-        public ApplicationUser Owner { get; set; }
+        public AppUser Owner { get; set; }
         [Required]
-        public ApplicationUser Tenant { get; set; }
+        public AppUser Tenant { get; set; }
         [Required]
         public Realty Realty { get; set; }
         [Required]

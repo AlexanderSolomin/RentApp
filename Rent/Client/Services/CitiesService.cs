@@ -46,13 +46,13 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<City>> List(PagingParameters pagingParameters)
+        public async Task<PagedResponse<City>> GetAll(PagingParameters pagingParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = pagingParameters.PageNumber.ToString()
             };
-            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("cities", queryStringParam));
+            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/cities", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
@@ -63,13 +63,17 @@ namespace Rent.Client.Services
                 Items = JsonSerializer.Deserialize<List<City>>(content, _options),
                 MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
             };
+            foreach (var city in pagedResponse.Items)
+            {
+                Console.WriteLine(city.Title);
+            }
             return pagedResponse;
 
             // return await _httpClient
             // .GetFromJsonAsync<AppDataResult<City>>($"api/cities?skip={skip}&take={take}&orderby={orderBy}");
         }
 
-        public Task<IEnumerable<City>> List(Expression<Func<City, bool>> predicate)
+        public Task<IEnumerable<City>> GetAllExpr(Expression<Func<City, bool>> predicate)
         {
             throw new NotImplementedException();
         }

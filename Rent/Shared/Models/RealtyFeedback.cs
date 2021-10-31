@@ -8,7 +8,7 @@ namespace Rent.Shared.Models
 		public string Text { get; set; }
 
 		[Required]
-		public ApplicationUser SenderUser { get; set; }
+		public AppUser SenderUser { get; set; }
 		
 		[Required]
 		public Realty RecipientRealty { get; set; }

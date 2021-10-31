@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace Rent.Server.Controllers
 {
+    // [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CitiesController : ControllerBase
@@ -31,7 +32,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var result = await _repository.List(pagingParameters);
+                var result = await _repository.GetAll(pagingParameters);
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
                 _logger.LogInformation($"{DateTime.Now}: Queried all the cities");
                 return Ok(result);

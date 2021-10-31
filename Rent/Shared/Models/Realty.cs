@@ -36,12 +36,10 @@ namespace Rent.Shared.Models
         [Required(ErrorMessage = "Укажите город")]
         public City City { get; set; }
 
-        [Required(ErrorMessage = "Введите название улицы")]
-        [StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]  
-        public string Street { get; set; }
-        public ApplicationUser Owner { get; set; }     
+        public AppUser Owner { get; set; }     
         public IEnumerable<RealtyFeedback> Feedbacks { get; set; }
         public IEnumerable<Deal> Deals { get; set; }
         public string ImgPath { get; set; }
+        public bool IsActive { get; set; }
     }
 }

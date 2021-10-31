@@ -7,9 +7,9 @@ namespace Rent.Shared.Models
     {
  		public string Text { get; set; }
 		[Required]
-		public ApplicationUser SenderUser { get; set; }
+		public AppUser SenderUser { get; set; }
 		[Required]
-		public ApplicationUser RecipientUser { get; set; }
+		public AppUser RecipientUser { get; set; }
 		[Required]
 		public Deal UserDeal { get; set; }
 		[Required(ErrorMessage = "Введите оценку (1 - 5)")]

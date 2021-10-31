@@ -5,8 +5,7 @@
 
 
 <h1>Города</h1>
-@{ 
-}
+@* 
     <SfGrid TValue="City" AllowPaging="true" AllowSorting="true" >
         <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AppDataAdaptor<City>)"></SfDataManager>
         <GridPageSettings PageSize="5" PageSizes="@pagerDropdown" PageCount="3"></GridPageSettings> 
@@ -47,14 +46,14 @@
     @* protected override async Task OnInitializedAsync()
     {
         cityGrid = await CityService.;
-    } *@
-    @* private async void OnInput(InputEventArgs args)
+    } 
+    private async void OnInput(InputEventArgs args)
     {
         await this.cities.SearchAsync(args.Value);
-    }  *@
+    } 
 
         private async void SearchClick()
     {
         await this.cityGrid.SearchAsync(searchTextBox.Value);
     }
-}
+} *@
