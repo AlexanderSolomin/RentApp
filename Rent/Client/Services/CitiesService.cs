@@ -31,7 +31,8 @@ namespace Rent.Client.Services
             var queryStringParam = new Dictionary<string, string>
             {
                 ["pageNumber"] = pagingParameters.PageNumber.ToString(),
-                ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm
+                ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm,
+                ["orderBy"] = pagingParameters.OrderBy
             };
             var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/cities", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();

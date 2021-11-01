@@ -2,9 +2,9 @@ namespace Rent.Shared.Request
 {
     public class PagingParameters
     {
-		const int maxPageSize = 50; 
+		const int maxPageSize = 100; 
 		public int PageNumber { get; set; } = 1; 
-		private int _pageSize = 5; 
+		private int _pageSize = 10; 
 		public int PageSize 
 		{ 
 			get 
@@ -17,6 +17,7 @@ namespace Rent.Shared.Request
 			}
 		}
 		public string SearchTerm { get; set; }
+		public string OrderBy { get; set; } = "Title";
 	}
 
 }

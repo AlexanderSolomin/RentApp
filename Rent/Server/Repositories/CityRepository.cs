@@ -23,7 +23,10 @@ namespace Rent.Server.Repositories
 
 			public async Task<PagedList<City>> GetAllCities(PagingParameters pagedParameters)
 			{
-				var result = await _dbContext.Cities.Search(pagedParameters.SearchTerm).ToListAsync();
+				var result = await _dbContext.Cities
+											.Search(pagedParameters.SearchTerm)
+											.OrderBy(pagedParameters.OrderBy)
+											.ToListAsync();
 				return PagedList<City>.ToPagedList(result, pagedParameters.PageNumber, pagedParameters.PageSize);
 			}
 
