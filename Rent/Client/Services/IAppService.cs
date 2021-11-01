@@ -8,10 +8,10 @@ using Rent.Client.Features;
 
 namespace Rent.Client.Services
 {
-    public interface IService<T> where T : class
+    public interface IAppService<T> where T : class
     {
         Task<T> GetById(Guid id);
-        Task<AppDataResult<T>> GetByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title");
+        Task<AppDataResult<T>> GetByTitle(string title);
         Task<PagedResponse<T>> GetAll(PagingParameters pagingParameters);
         Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate);
         Task<T> Add(T entity);

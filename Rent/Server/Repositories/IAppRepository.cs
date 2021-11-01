@@ -11,7 +11,7 @@ namespace Rent.Server.Repositories
     public interface IAppRepository<T>
     {
         Task<T> GetById(Guid id);
-        Task<AppDataResult<T>> GetByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title");
+        Task<T> GetByTitle(string title);
         Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate);
         Task<T> Add(T entity);
         Task Delete(T entity);

@@ -15,7 +15,7 @@ using System.Web;
 
 namespace Rent.Client.Services
 {
-    public class CitiesService : IService<City>
+    public class CitiesService : AppService<City>, ICitiesService
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _options;
@@ -26,31 +26,12 @@ namespace Rent.Client.Services
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
-        public Task<City> Add(City entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(City entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<City> Edit(City entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<City> GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<PagedResponse<City>> GetAll(PagingParameters pagingParameters)
+        public async Task<PagedResponse<City>> GetCitiesPaged(PagingParameters pagingParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
-                ["pageNumber"] = pagingParameters.PageNumber.ToString()
+                ["pageNumber"] = pagingParameters.PageNumber.ToString(),
+                ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm
             };
             var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/cities", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
@@ -68,20 +49,6 @@ namespace Rent.Client.Services
                 Console.WriteLine(city.Title);
             }
             return pagedResponse;
-
-            // return await _httpClient
-            // .GetFromJsonAsync<AppDataResult<City>>($"api/cities?skip={skip}&take={take}&orderby={orderBy}");
-        }
-
-        public Task<IEnumerable<City>> GetAllExpr(Expression<Func<City, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<AppDataResult<City>> GetByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title")
-        {
-            return await _httpClient
-            .GetFromJsonAsync<AppDataResult<City>>($"api/cities?title={title}?skip={skip}&take={take}&orderby={orderBy}");
         }
     }
 }

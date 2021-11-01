@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Syncfusion.Blazor;
 using Rent.Client.Services;
 using Rent.Shared.Models;
 
@@ -22,7 +21,7 @@ namespace Rent.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddHttpClient<IService<City>, CitiesService>("Rent.ServerAPI", 
+            builder.Services.AddHttpClient<ICitiesService, CitiesService>("Rent.ServerAPI", 
                 client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
  

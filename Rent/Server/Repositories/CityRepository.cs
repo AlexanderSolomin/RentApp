@@ -16,7 +16,6 @@ namespace Rent.Server.Repositories
 		public class CityRepository : AppRepository<City>, ICityRepository
 		{
 			private readonly AppDbContext _dbContext;
-
 			public CityRepository(AppDbContext dbContext) : base(dbContext)
 			{
 				_dbContext = dbContext;

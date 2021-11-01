@@ -26,14 +26,9 @@ namespace Rent.Server.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public virtual async Task<AppDataResult<T>> GetByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title")
+        public virtual async Task<T> GetByTitle(string title)
         {
-            AppDataResult<T> result = new AppDataResult<T>()
-            {
-                Result = await _dbContext.Set<T>().Where(e => e.Title.Contains(title)).OrderBy(orderBy).Skip(skip).Take(take).ToListAsync(),
-                Count = await _dbContext.Set<T>().Where(e => e.Title.Contains(title)).CountAsync()
-            };
-            return result;
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(c => c.Title == title);
         }
 
         public virtual async Task<PagedList<T>> GetAll(PagingParameters pagedParameters)

@@ -47,7 +47,7 @@ namespace Rent.Server.Controllers
 
         // GET: 
         [HttpGet("{title}")]
-        public async Task<ActionResult> GetCityByTitle(string title, int skip = 0, int take = 5, string orderBy = "Title")
+        public async Task<ActionResult> GetCityByTitle(string title)
         {
             try
             {
@@ -133,7 +133,6 @@ namespace Rent.Server.Controllers
                     $"Error updating city: {ex.Message}");
             }
         }
-
 
         // DELETE:
         [HttpDelete("{id:Guid}")]
