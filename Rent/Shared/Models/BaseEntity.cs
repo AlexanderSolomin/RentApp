@@ -9,8 +9,8 @@ namespace Rent.Shared.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; } = Guid.NewGuid();
         
-        [Required(ErrorMessage = "Введите название")]
+        [Required(ErrorMessage = "Обязательное поле")]
         [StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]    
-        public string Title { get; set; } = "Default Title";
+        public string Title { get; set; }
     }
 }

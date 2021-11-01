@@ -3,7 +3,10 @@
 @inject ICitiesService CityService
 
 <h2>Новый город</h2>
-<EditForm Model="_city" OnSubmit="Create" class="card card-body bg-light mt-5">
+<EditForm Model="@_city" OnValidSubmit="@Create" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <SuccessNotification @ref="_notification"/>
     <div class="form-group row">
         <label for="title" class="col-md-2 col-form-label">Название:</label>
         <div class="col-md-10">
@@ -37,8 +40,10 @@
 
 @code {
     private City _city = new City();
+    private SuccessNotification _notification;
     private async Task Create()
     {
         await CityService.AddCity(_city);
+        _notification.Show();
     }
 }
