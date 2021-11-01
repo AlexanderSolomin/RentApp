@@ -96,9 +96,9 @@ namespace Rent.Server.Controllers
                     ModelState.AddModelError("Title", "Title exists");
                     return BadRequest(ModelState);
                 }
-                var addedCity = await _repository.Add(city);
+                await _repository.Add(city);
                 _logger.LogInformation($"{DateTime.Now}: At {typeof(City).Name} New city GUID {city.Id} added");
-                return CreatedAtAction(nameof(GetCities), addedCity);
+                return CreatedAtAction(nameof(GetCities), city);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,8 @@ namespace Rent.Server.Controllers
                     return NotFound($"City with ID {id} not found");
                 }
                 
-                return Ok(await _repository.Edit(city));
+                await _repository.Edit(city);
+                return Ok(await _repository.GetById(city.Id));
             }
             catch (Exception ex)
             {

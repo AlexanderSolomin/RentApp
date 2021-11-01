@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Rent.Client.Features;
 using Rent.Shared.Request;
 
 namespace Rent.Client.Services
 {
     public class AppService<T> : IAppService<T> where T : class
     {
+
         public AppService() 
         {
         }
 
-        public virtual Task<T> Add(T entity)
+        public virtual Task Add(T entity)
         {
             throw new NotImplementedException();
         }
@@ -20,12 +24,12 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public virtual Task<T> Edit(T entity)
+        public virtual Task Edit(T entity)
         {
             throw new NotImplementedException();
         }
 
-        public virtual Task<Features.PagedResponse<T>> GetAll(PagingParameters pagingParameters)
+        public virtual Task<PagedResponse<T>> GetAll(PagingParameters pagingParameters)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +44,7 @@ namespace Rent.Client.Services
             throw new NotImplementedException();
         }
 
-        public virtual Task<Rent.Shared.Models.AppDataResult<T>> GetByTitle(string title)
+        public virtual Task<T> GetByTitle(string title)
         {
             throw new NotImplementedException();
         }

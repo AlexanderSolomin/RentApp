@@ -21,20 +21,19 @@ namespace Rent.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> GetById(Guid id)
+        public async Task<T> GetById(Guid id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public virtual async Task<T> GetByTitle(string title)
+        public async Task<T> GetByTitle(string title)
         {
             return await _dbContext.Set<T>().FirstOrDefaultAsync(c => c.Title == title);
         }
 
-        public virtual async Task<PagedList<T>> GetAll(PagingParameters pagedParameters)
+        public async Task<IEnumerable<T>> GetAll()
         {
-            var result = await _dbContext.Set<T>().ToListAsync();
-            return PagedList<T>.ToPagedList(result, pagedParameters.PageNumber, pagedParameters.PageSize);
+            return await _dbContext.Set<T>().ToListAsync();
         }
 
         public virtual async Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate)
@@ -44,19 +43,17 @@ namespace Rent.Server.Repositories
                    .ToListAsync();
         }
 
-        public virtual async Task<T> Add(T entity)
+        public virtual async Task Add(T entity)
         {
-            var result = await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
-            return result.Entity;
         }
 
-        public virtual async Task<T> Edit(T entity)
+        public virtual async Task Edit(T entity)
         {
             var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Title == entity.Title);
             _dbContext.Entry(result).CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
-            return result;
         }
 
         public virtual async Task Delete(T entity)

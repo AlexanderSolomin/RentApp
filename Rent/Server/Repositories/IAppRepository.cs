@@ -12,9 +12,10 @@ namespace Rent.Server.Repositories
     {
         Task<T> GetById(Guid id);
         Task<T> GetByTitle(string title);
+        Task<IEnumerable<T>> GetAll();
         Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate);
-        Task<T> Add(T entity);
+        Task Add(T entity);
         Task Delete(T entity);
-        Task<T> Edit(T entity);
+        Task Edit(T entity);
     }
 }

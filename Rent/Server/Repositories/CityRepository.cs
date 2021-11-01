@@ -29,7 +29,6 @@ namespace Rent.Server.Repositories
 											.ToListAsync();
 				return PagedList<City>.ToPagedList(result, pagedParameters.PageNumber, pagedParameters.PageSize);
 			}
-
     
 		}
 	}

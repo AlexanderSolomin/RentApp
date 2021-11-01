@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@page "/cities/createCity"
+@attribute [Authorize]
+@inject ICitiesService CityService
+
+<h2>Новый город</h2>
+<EditForm Model="_city" OnSubmit="Create" class="card card-body bg-light mt-5">
+    <div class="form-group row">
+        <label for="title" class="col-md-2 col-form-label">Название:</label>
+        <div class="col-md-10">
+            <InputText id="title" class="form-control" @bind-Value="_city.Title" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="subject" class="col-md-2 col-form-label">Субъект: </label>
+        <div class="col-md-10">
+            <InputText id="subject" class="form-control" @bind-Value="_city.Subject" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="population" class="col-md-2 col-form-label">Население: </label>
+        <div class="col-md-10">
+            <InputNumber id="population" class="form-control" @bind-Value="_city.Population" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="district" class="col-md-2 col-form-label">Регион:</label>
+        <div class="col-md-10">
+            <InputText id="district" class="form-control" @bind-Value="_city.District" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">Создать</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private City _city = new City();
+    private async Task Create()
+    {
+        await CityService.AddCity(_city);
+    }
 }

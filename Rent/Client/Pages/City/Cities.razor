@@ -3,14 +3,16 @@
 @inject ICitiesService CityService
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <Search OnSearchChanged="SearchChanged" />
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <Sort OnSortChanged="SortChanged" />
     </div>
     <div class="col-md-2">
-        <a href="/createCity">Создать</a>
+        <a href="cities/createCity">
+            <button type="button" class="btn btn-warning">Создать</button>
+        </a>
     </div>
 </div>
 <div class="row">

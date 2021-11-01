@@ -51,5 +51,10 @@ namespace Rent.Client.Services
             }
             return pagedResponse;
         }
+
+        public async Task AddCity(City city)
+        {
+            await _httpClient.PostAsJsonAsync("api/cities", city);
+        }
     }
 }
