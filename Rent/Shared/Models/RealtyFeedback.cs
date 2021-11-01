@@ -6,7 +6,8 @@ namespace Rent.Shared.Models
 	public class RealtyFeedback : BaseEntity
 	{
 		public string Text { get; set; }
-
+		public DateTime CreatedAt { get; set; }
+		
 		[Required]
 		public AppUser SenderUser { get; set; }
 		

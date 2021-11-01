@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Rent.Shared.Models;
 using Rent.Shared.Request;
+using Rent.Server.Data;
+using Rent.Server.Repositories.Extensions;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 
-namespace Rent.Server.Data
+namespace Rent.Server.Repositories
 {
     public class AppRepository<T> : IAppRepository<T> where T : BaseEntity
     {
@@ -47,14 +49,14 @@ namespace Rent.Server.Data
                    .ToListAsync();
         }
 
-        public async Task<T> Add(T entity)
+        public virtual async Task<T> Add(T entity)
         {
             var result = await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task<T> Edit(T entity)
+        public virtual async Task<T> Edit(T entity)
         {
             var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Title == entity.Title);
             _dbContext.Entry(result).CurrentValues.SetValues(entity);
@@ -62,7 +64,7 @@ namespace Rent.Server.Data
             return result;
         }
 
-        public async Task Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();

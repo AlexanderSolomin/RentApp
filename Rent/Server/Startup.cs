@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 using Rent.Server.Data;
+using Rent.Server.Repositories;
 using Rent.Shared.Models;
 using Microsoft.Extensions.Logging;
 
@@ -53,6 +51,8 @@ namespace Rent.Server
                 .AddIdentityServerJwt();
 
             services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+            services.AddScoped<ICityRepository, CityRepository>();
+            
             services.AddCors(policy =>
                     {
                         policy.AddPolicy("CorsPolicy", opt => opt

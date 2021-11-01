@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Rent.Server.Data;
+using Rent.Server.Repositories;
 using Rent.Shared.Models;
 using Rent.Shared.Request;
 using Microsoft.Extensions.Logging;
@@ -18,9 +18,9 @@ namespace Rent.Server.Controllers
     [ApiController]
     public class CitiesController : ControllerBase
     {
-        private readonly IAppRepository<City> _repository;
+        private readonly ICityRepository _repository;
         private readonly ILogger<City> _logger;
-        public CitiesController(ILogger<City> logger, IAppRepository<City> repository)
+        public CitiesController(ILogger<City> logger, ICityRepository repository)
         {
             this._logger = logger;
             this._repository = repository;
@@ -32,7 +32,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var result = await _repository.GetAll(pagingParameters);
+                var result = await _repository.GetAllCities(pagingParameters);
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
                 _logger.LogInformation($"{DateTime.Now}: Queried all the cities");
                 return Ok(result);
