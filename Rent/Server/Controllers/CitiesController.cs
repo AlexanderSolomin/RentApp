@@ -52,7 +52,7 @@ namespace Rent.Server.Controllers
             try
             {
                 _logger.LogInformation($"{DateTime.Now}: Getting city by title");
-                return Ok(await _repository.GetByTitle(title));
+                return Ok(await _repository.GetCityByTitle(title));
 
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace Rent.Server.Controllers
                 {
                     return BadRequest();
                 }
-                var nameExists = await _repository.GetByTitle(city.Title);
+                var nameExists = await _repository.GetCityByTitle(city.Title);
                 if (nameExists != null)
                 {
                     ModelState.AddModelError("Title", "Title exists");

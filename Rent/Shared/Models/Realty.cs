@@ -6,40 +6,70 @@ namespace Rent.Shared.Models
 {
     public class Realty : BaseEntity
     {
-        public DateTime CreatedAt { get; set; }
+        public Realty()
+        {
+        }
+
+        [Required(ErrorMessage = "Обязательное поле")]
+		[StringLength(60, ErrorMessage = "Заголовок не может быть более 60 символов")]
+        [Display(Name = "Заголовок")]
+        public string Title { get; set; }
+
+        [Required]
+        [Display(Name = "Создано")]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Введите описание")]
         [StringLength(2000, ErrorMessage = "Описание не может быть более 2000 символов")]  
+        [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Введите год")]
-        [Range(1800, 2022)]  
-        public int BuildYear { get; set; }
-        [Required(ErrorMessage = "Введите площадь")]
-        [Range(0, 3000)]  
-        public double Area { get; set; }
-        [Required(ErrorMessage = "Введите стоимость")]
-        [Range(1000, 10000000)]  
-        public int Rent { get; set; }
-        [Required(ErrorMessage = "Введите этажность здания")]
-        [Range(1, 50)]  
-        public int Storeys { get; set; }
-        [Required(ErrorMessage = "Введите этаж")]
-        [Range(1, 50)]  
-        public int Floor { get; set; }
-        public double Rate { get; set; }
-        public Status Status { get; set; }
-
-        [Required(ErrorMessage = "Выберите категорию помещения")]
-        public Category Category { get; set; }
-
         [Required(ErrorMessage = "Укажите город")]
+        [Display(Name = "Город")]
         public City City { get; set; }
 
-        public AppUser Owner { get; set; }     
-        public IEnumerable<RealtyFeedback> Feedbacks { get; set; }
-        public IEnumerable<Deal> Deals { get; set; }
+        [Required(ErrorMessage = "Введите год постройки")]
+        [Range (1800, 2022, ErrorMessage = "Год не может быть больше текущего")]  
+        [Display(Name = "Год постройки")]
+        public int BuildYear { get; set; }
+
+        [Required(ErrorMessage = "Введите площадь")]
+        [Range(1, int.MaxValue, ErrorMessage = "Площадь не может быть меньше 1")]  
+        [Display(Name = "Площадь помещения")]
+        public double Area { get; set; }
+
+        [Required(ErrorMessage = "Введите стоимость")]
+        [Range(0, int.MaxValue, ErrorMessage = "Стоимость не может быть меньше 0")]  
+        [Display(Name = "Стоимость аренды")]
+        public int Rent { get; set; }
+        
+        [Required(ErrorMessage = "Введите этажность здания")]
+        [Range(1, 50, ErrorMessage = "(1 - 50)")]  
+        [Display(Name = "Этажность здания")]
+        public int Storeys { get; set; }
+        
+        [Required(ErrorMessage = "Введите этаж")]
+        [Range(1, 50, ErrorMessage = "(1 - 50)")] 
+        [Display(Name = "Этаж")] 
+        public int Floor { get; set; }
+
+        [Display(Name = "Рейтинг")] 
+        public double Rate { get; set; }
+
+        [Required]
+        [Display(Name = "Статус")] 
+        public Status Status { get; set; } = Status.AVAILABLE;
+
+        [Required(ErrorMessage = "Выберите категорию помещения")]
+        [Display(Name = "Категория")] 
+        public Category Category { get; set; }
+
+        [Required]
+        [Display(Name = "Изображение")] 
         public string ImgPath { get; set; }
-        public bool IsActive { get; set; }
+
+        [Required]
+        [Display(Name = "Активно")] 
+        public bool IsActive { get; set; } = true;
     }
 }

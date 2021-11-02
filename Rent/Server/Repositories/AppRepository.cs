@@ -12,7 +12,7 @@ using System.Linq.Dynamic.Core;
 
 namespace Rent.Server.Repositories
 {
-    public class AppRepository<T> : IAppRepository<T> where T : BaseEntity
+    public class AppRepository<T> : IAppRepository<T> where T : class
     {
         private readonly AppDbContext _dbContext;
 
@@ -26,10 +26,10 @@ namespace Rent.Server.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public async Task<T> GetByTitle(string title)
-        {
-            return await _dbContext.Set<T>().FirstOrDefaultAsync(c => c.Title == title);
-        }
+        // public async Task<T> GetByTitle(string title)
+        // {
+        //     return await _dbContext.Set<T>().FirstOrDefaultAsync(c => c.Title == title);
+        // }
 
         public async Task<IEnumerable<T>> GetAll()
         {
@@ -51,7 +51,7 @@ namespace Rent.Server.Repositories
 
         public virtual async Task Edit(T entity)
         {
-            var result = await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Title == entity.Title);
+            var result = await _dbContext.Set<T>().FindAsync(entity);
             _dbContext.Entry(result).CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
         }

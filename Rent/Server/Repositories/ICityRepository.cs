@@ -11,5 +11,6 @@ namespace Rent.Server.Repositories
     public interface ICityRepository : IAppRepository<City>
     {
         Task<PagedList<City>> GetAllCities(PagingParameters realtyParameters);
+        Task<City> GetCityByTitle(string title);
     }
 }

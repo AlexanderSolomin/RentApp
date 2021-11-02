@@ -24,7 +24,8 @@ namespace Rent.Server.Data
         public DbSet<Deal> Deals { get; set; }
         public DbSet<Realty> Realties { get; set; }
         public DbSet<UserFeedback> UserFeedbacks { get; set; }
-        public DbSet<RealtyFeedback> RealtyFeedbacks { get; set; }
+        public DbSet<DealFeedback> DealFeedbacks { get; set; }
+        public DbSet<UserRealty> UserRealties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)  
         {  

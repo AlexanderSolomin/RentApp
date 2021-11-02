@@ -2,14 +2,27 @@
 
 namespace Rent.Shared.Models
 {
-    public class City : BaseEntity
-    {
-        [Required(ErrorMessage = "Обязательное поле")]
-        public string Subject { get; set; }
+	public class City : BaseEntity
+	{
+		public City()
+		{
 
-        [Range(1, double.MaxValue, ErrorMessage = "Численность населения не может быть меньше 1")]
-        public int Population { get; set; }
-        [Required(ErrorMessage = "Обязательное поле")]
-        public string District { get; set; }
-    }
+		}
+		[Required(ErrorMessage = "Обязательное поле")]
+		[StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]
+        [Display(Name = "Название")]
+		public string Title { get; set; }
+
+		[Required(ErrorMessage = "Обязательное поле")]
+        [Display(Name = "Субъект")]
+		public string Subject { get; set; }
+
+		[Range(1, int.MaxValue, ErrorMessage = "Численность населения не может быть меньше 1")]
+        [Display(Name = "Население")]
+		public int Population { get; set; }
+		
+        [Required(ErrorMessage = "Обязательное поле")]	        
+        [Display(Name = "Регион")]
+	    public string District { get; set; }
+	}
 }
