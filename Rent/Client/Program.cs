@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rent.Client.Services;
 using Rent.Shared.Models;
+using Tewr.Blazor.FileReader;
 
 namespace Rent.Client
 {
@@ -29,6 +30,8 @@ namespace Rent.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Rent.ServerAPI"));
             
             builder.Services.AddApiAuthorization();
+
+            builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
 
             //builder.Services.AddSyncfusionBlazor();
             //builder.Services.AddScoped(typeof(AppDataAdaptor<>));

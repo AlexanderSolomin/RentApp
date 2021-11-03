@@ -71,32 +71,15 @@ namespace Rent.Server.Data.Configuration
 
             adm.PasswordHash = phAdm.HashPassword(adm, "qwecxz");
             user.PasswordHash = phUser.HashPassword(user, "cxzewq");
-            user.PasswordHash = phUser1.HashPassword(user, "cxzewq");
-            user.PasswordHash = phUser2.HashPassword(user, "cxzewq");
-            user.PasswordHash = phUser3.HashPassword(user, "cxzewq");
+            user1.PasswordHash = phUser1.HashPassword(user, "cxzewq");
+            user2.PasswordHash = phUser2.HashPassword(user, "cxzewq");
+            user3.PasswordHash = phUser3.HashPassword(user, "cxzewq");
 
             builder.HasData(adm);  
             builder.HasData(user);  
             builder.HasData(user1);  
             builder.HasData(user2);  
             builder.HasData(user3);  
-
-
-            // builder.OwnsOne(r => r.Realties).HasData(
-            //     new Realty { Owner = adm, CreatedAt = DateTime.Now.AddDays(-300), Description = "Строение 1 описание", BuildYear = 1995,
-            //     Area = 33, Rent = 30000, Storeys = 5, Floor = 3, Rate = 0, Status = 0, Category = 0, City = new City(), 
-            //     Feedbacks = new List<RealtyFeedback> {
-            //         new RealtyFeedback { Text = "Feedback 1", CreatedAt = DateTime.Now.AddDays(-250), SenderUser = user, Rate = 4},
-            //         new RealtyFeedback { Text = "Feedback 2", CreatedAt = DateTime.Now.AddDays(-230), SenderUser = user1, Rate = 2},
-            //         new RealtyFeedback { Text = "Feedback 3", CreatedAt = DateTime.Now.AddDays(-200), SenderUser = user2, Rate = 5},
-            //         new RealtyFeedback { Text = "Feedback 4", CreatedAt = DateTime.Now.AddDays(-180), SenderUser = user3, Rate = 4},
-            //     }, 
-            //     Deals = new List<Deal> {
-            //         new Deal { StartDate = DateTime.Now.AddDays(-280), EndDate = DateTime.Now.AddDays(-250), RentPerMonth = 30000, 
-            //             Owner = adm, Tenant = user, Realty = , Feedbacks = }
-            //     },
-            //     ImgPath = "", IsActive = true
-            // });
 		}
 	}
 }

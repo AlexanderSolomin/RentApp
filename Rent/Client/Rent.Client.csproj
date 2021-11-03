@@ -24,6 +24,7 @@
     <None Remove="Microsoft.AspNetCore.WebUtilities" />
     <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
     <None Remove="Pages\City\" />
+    <None Remove="Tewr.Blazor.FileReader" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -38,5 +39,6 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils" Version="5.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Tewr.Blazor.FileReader" Version="3.2.0.21211" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@ autom4te.cache/
 *.tar.gz
 tarballs/
 test-results/
+Img/*
 
 # Mac bundle stuff
 *.dmg
@@ -408,3 +409,4 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+Rent/Server/StaticFiles/Img/69a3585077c13bd827f49a04e3a0e7c0.JPG

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -55,6 +55,21 @@ namespace Rent.Client.Services
         public async Task AddCity(City city)
         {
             await _httpClient.PostAsJsonAsync("api/cities", city);
+        }
+
+        public async Task<string> UploadImage(MultipartFormDataContent content)
+        {
+            var postResult = await _httpClient.PostAsync($"{_httpClient.BaseAddress.AbsoluteUri}api/upload", content);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+            if (!postResult.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(postContent);
+            }
+            else
+            {
+                var imgUrl = Path.Combine(_httpClient.BaseAddress.AbsoluteUri, postContent);
+                return imgUrl;
+            }
         }
     }
 }

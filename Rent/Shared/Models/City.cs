@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Rent.Shared.Models
 {
@@ -6,7 +7,6 @@ namespace Rent.Shared.Models
 	{
 		public City()
 		{
-
 		}
 		[Required(ErrorMessage = "Обязательное поле")]
 		[StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]

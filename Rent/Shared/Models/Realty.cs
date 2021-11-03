@@ -26,7 +26,7 @@ namespace Rent.Shared.Models
 
         [Required(ErrorMessage = "Укажите город")]
         [Display(Name = "Город")]
-        public City City { get; set; }
+        public City City { get; set; } 
 
         [Required(ErrorMessage = "Введите год постройки")]
         [Range (1800, 2022, ErrorMessage = "Год не может быть больше текущего")]  
@@ -53,8 +53,13 @@ namespace Rent.Shared.Models
         [Display(Name = "Этаж")] 
         public int Floor { get; set; }
 
+        [Required(ErrorMessage = "Введите количество комнат")]
+        [Range(1, 20, ErrorMessage = "(1 - 20)")] 
+        [Display(Name = "Комнат")] 
+        public int Rooms { get; set; }
+
         [Display(Name = "Рейтинг")] 
-        public double Rate { get; set; }
+        public double Rate { get; set; } = 0;
 
         [Required]
         [Display(Name = "Статус")] 
@@ -66,7 +71,7 @@ namespace Rent.Shared.Models
 
         [Required]
         [Display(Name = "Изображение")] 
-        public string ImgPath { get; set; }
+        public string ImgPath { get; set; } = "../Shared/Img/DefaultRealty.jpg";
 
         [Required]
         [Display(Name = "Активно")] 

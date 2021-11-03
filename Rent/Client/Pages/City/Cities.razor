@@ -47,7 +47,6 @@
 
     private async Task SortChanged(string orderBy)
     {
-        Console.WriteLine(orderBy);
         _pagingParameters.OrderBy = orderBy;
         await GetCities();
     }

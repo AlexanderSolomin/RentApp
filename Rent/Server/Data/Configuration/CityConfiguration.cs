@@ -13,16 +13,16 @@ namespace Rent.Server.Data.Configuration
 		public void Configure(EntityTypeBuilder<City> builder)
 		{
 			var cities = new List<City>();
-            using (StreamReader sr = new StreamReader(@"../Shared/Seed/addresses.json"))
-            {
-                string json = sr.ReadToEnd();
-                cities = JsonConvert.DeserializeObject<List<City>>(json);
-            }
-            foreach (City city in cities)
-            {
-                city.Id = Guid.NewGuid();
-            }
-            builder.HasData(cities);
+			using (StreamReader sr = new StreamReader(@"./Data/Seed/addresses.json"))
+			{
+				string json = sr.ReadToEnd();
+				cities = JsonConvert.DeserializeObject<List<City>>(json);
+			}
+			foreach (City city in cities)
+			{
+				city.Id = Guid.NewGuid();
+			}
+			builder.HasData(cities);
 		}
 	}
 }

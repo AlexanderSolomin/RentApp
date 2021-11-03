@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Rent.Shared.Models;
 using Rent.Shared.Request;
 using Rent.Client.Features;
+using System.Net.Http;
 
 namespace Rent.Client.Services
 {
@@ -10,5 +11,7 @@ namespace Rent.Client.Services
     {
         Task<PagedResponse<City>> GetCitiesPaged(PagingParameters pagingParameters);
         Task AddCity(City city);
+        Task<string> UploadImage(MultipartFormDataContent content);
+
     }
 }
