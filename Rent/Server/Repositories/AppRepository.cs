@@ -26,11 +26,6 @@ namespace Rent.Server.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        // public async Task<T> GetByTitle(string title)
-        // {
-        //     return await _dbContext.Set<T>().FirstOrDefaultAsync(c => c.Title == title);
-        // }
-
         public async Task<IEnumerable<T>> GetAll()
         {
             return await _dbContext.Set<T>().ToListAsync();
@@ -49,9 +44,9 @@ namespace Rent.Server.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public virtual async Task Edit(T entity)
+        public virtual async Task Edit(Guid id, T entity)
         {
-            var result = await _dbContext.Set<T>().FindAsync(entity);
+            var result = await _dbContext.Set<T>().FindAsync(id);
             _dbContext.Entry(result).CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
         }

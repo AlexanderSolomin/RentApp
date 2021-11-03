@@ -10,7 +10,7 @@ namespace Rent.Client.Services
 {
     public interface IAppService<T> where T : class
     {
-        Task<T> GetById(Guid id);
+        Task<T> GetById(string id);
         Task<T> GetByTitle(string title);
         Task<PagedResponse<T>> GetAll(PagingParameters pagingParameters);
         Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate);

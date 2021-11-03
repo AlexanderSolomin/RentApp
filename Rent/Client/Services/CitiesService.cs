@@ -20,7 +20,7 @@ namespace Rent.Client.Services
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _options;
 
-        public CitiesService(HttpClient httpClient)
+        public CitiesService(HttpClient httpClient) : base(httpClient)
         {
             _httpClient = httpClient;
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -52,11 +52,6 @@ namespace Rent.Client.Services
             return pagedResponse;
         }
 
-        public async Task AddCity(City city)
-        {
-            await _httpClient.PostAsJsonAsync("api/cities", city);
-        }
-
         public async Task<string> UploadImage(MultipartFormDataContent content)
         {
             var postResult = await _httpClient.PostAsync($"{_httpClient.BaseAddress.AbsoluteUri}api/upload", content);
@@ -70,6 +65,24 @@ namespace Rent.Client.Services
                 var imgUrl = Path.Combine(_httpClient.BaseAddress.AbsoluteUri, postContent);
                 return imgUrl;
             }
+        }
+
+        public async Task<City> GetCityById(string id)
+        {
+            return await _httpClient.GetFromJsonAsync<City>($"api/cities/{id}");
+        }
+
+        public async Task EditCity(City city)
+        {
+            await _httpClient.PutAsJsonAsync<City>($"api/cities/{city.Id}", city);
+        }
+        public async Task AddCity(City city)
+        {
+            await _httpClient.PostAsJsonAsync("api/cities", city);
+        }
+        public async Task DeleteCity(Guid id)
+        {
+			await _httpClient.DeleteAsync($"api/cities/{id}");
         }
     }
 }

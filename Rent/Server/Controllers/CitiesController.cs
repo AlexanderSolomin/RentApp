@@ -110,7 +110,7 @@ namespace Rent.Server.Controllers
 
         // PUT:
         [HttpPut("{id:Guid}")]
-        public async Task<ActionResult<City>> PutCity(Guid id, City city)
+        public async Task<ActionResult<City>> PutCity(Guid id, [FromBody]City city)
         {
             try
             {
@@ -124,8 +124,8 @@ namespace Rent.Server.Controllers
                     return NotFound($"City with ID {id} not found");
                 }
                 
-                await _repository.Edit(city);
-                return Ok(await _repository.GetById(city.Id));
+                await _repository.Edit(id, city);
+                return Ok();
             }
             catch (Exception ex)
             {

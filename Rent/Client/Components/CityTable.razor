@@ -1,42 +1,63 @@
+@inject NavigationManager NavigationManager
+@inject IJSRuntime Js
+
 
 @if (Cities.Count > 0)
 {
-	<table class="table">
-	<thead>
-		<tr>
-			<th scope="col"> Название </th>
-			<th scope="col"> Регион </th>
-			<th scope="col"> Население </th>
-			<th scope="col"> Обновить </th>
-			<th scope="col"> Удалить </th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var city in Cities)
-			{
-				<tr>
-					<td class="align-middle">@city.Title</td>
-					<td class="align-middle">@city.District</td>
-					<td class="align-middle">@city.Population</td>
-					<td class="align-middle">
-						<button type="button" class="btn btn-info">Обновить</button>
-					</td>
-					<td class="align-middle">
-						<button type="button" class="btn btn-danger">Удалить</button>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"> Название </th>
+                <th scope="col"> Регион </th>
+                <th scope="col"> Население </th>
+                <th scope="col"> Обновить </th>
+                <th scope="col"> Удалить </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var city in Cities)
+            {
+                <tr>
+                    <td class="align-middle">@city.Title</td>
+                    <td class="align-middle">@city.District</td>
+                    <td class="align-middle">@city.Population</td>
+                    <td class="align-middle">
+                        <button type="button" class="btn btn-info" @onclick="() => RedirectToUpdate(city.Id)">Обновить</button>
+                    </td>
+                    <td class="align-middle">
+                        <button type="button" class="btn btn-danger" @onclick="() => Delete(city.Id)">Удалить</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else
 {
-	<span>
-		Загружаю список городов...
-	</span>
+    <span>
+        Загружаю список городов...
+    </span>
 }
 @code {
-	[Parameter]
-	public List<City> Cities { get; set; }
-}
+    [Parameter]
+    public List<City> Cities { get; set; }
+    [Parameter]
+    public EventCallback<Guid> OnDelete { get; set; }
 
+    private void RedirectToUpdate(Guid id)
+    {
+        var url = Path.Combine("cities/updateCity/", id.ToString());
+        NavigationManager.NavigateTo(url);
+    }
+
+    private async Task Delete(Guid id)
+    {
+        var city = Cities.FirstOrDefault(p => p.Id.Equals(id));
+
+        var confirmed = await Js.InvokeAsync<bool>("confirm", $"Удаляем город {city.Title}?");
+        if (confirmed)
+        {
+            await OnDelete.InvokeAsync(id);
+        }
+    }
+}

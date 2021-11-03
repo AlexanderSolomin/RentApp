@@ -17,7 +17,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <CityTable Cities="CitiesList" />
+        <CityTable Cities="CitiesList" OnDelete="DeleteCity" />
     </div>
 </div>
 <div class="row">
@@ -57,10 +57,19 @@
         await GetCities();
     }
 
+
+    private async Task DeleteCity(Guid id)
+    {
+        await CityService.DeleteCity(id);
+        _pagingParameters.PageNumber = 1;
+        await GetCities();
+    }
+
     private async Task GetCities()
     {
         var pagingResponse = await CityService.GetCitiesPaged(_pagingParameters);
         CitiesList = pagingResponse.Items;
         MetaData = pagingResponse.MetaData;
     }
+
 }
