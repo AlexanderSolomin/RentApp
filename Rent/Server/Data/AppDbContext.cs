@@ -13,27 +13,29 @@ using Rent.Server.Data.Configuration;
 
 namespace Rent.Server.Data
 {
-    public class AppDbContext : ApiAuthorizationDbContext<AppUser>
-    {
-        public AppDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
-        {
-        }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Deal> Deals { get; set; }
-        public DbSet<Realty> Realties { get; set; }
-        public DbSet<UserFeedback> UserFeedbacks { get; set; }
-        public DbSet<DealFeedback> DealFeedbacks { get; set; }
-        public DbSet<UserRealty> UserRealties { get; set; }
+	public class AppDbContext : ApiAuthorizationDbContext<AppUser>
+	{
+		public AppDbContext(
+			DbContextOptions options,
+			IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+		{
+		}
+		public DbSet<City> Cities { get; set; }
+		public DbSet<Realty> Realties { get; set; }
+		public DbSet<Deal> Deals { get; set; }
+		public DbSet<UserFeedback> UserFeedbacks { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)  
-        {  
-            base.OnModelCreating(builder);  
-            builder.ApplyConfiguration(new AppUserConfiguration());
-            builder.ApplyConfiguration(new IdentityRoleConfiguration());
-            builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
-            builder.ApplyConfiguration(new CityConfiguration());
-        }  
-    }
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
+
+			builder.ApplyConfiguration(new AppUserConfiguration());
+			builder.ApplyConfiguration(new IdentityRoleConfiguration());
+			builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
+			builder.ApplyConfiguration(new CityConfiguration());
+			builder.ApplyConfiguration(new RealtyConfiguration());
+            builder.ApplyConfiguration(new DealConfiguration());
+            builder.ApplyConfiguration(new UserFeedbackConfiguration());
+		}
+	}
 }

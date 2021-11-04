@@ -10,22 +10,22 @@ using System.Linq.Dynamic.Core;
 
 namespace Rent.Server.Repositories.Extensions
 {
-	public static class CityRepositoryExtension
+	public static class RealtyRepositoryExtension
 	{
-		public static IQueryable<City> Search(this IQueryable<City> cities, string searchTerm)
+		public static IQueryable<Realty> Search(this IQueryable<Realty> realties, string searchTerm)
 		{
 			if (string.IsNullOrWhiteSpace(searchTerm))
-				return cities;
-			return cities.Where(p => p.Title.ToLower().Contains(searchTerm.Trim().ToLower()));
+				return realties;
+			return realties.Where(p => p.Title.ToLower().Contains(searchTerm.Trim().ToLower()));
 		}
 
-		public static IQueryable<City> Sort(this IQueryable<City> cities, string orderByQueryString)
+		public static IQueryable<Realty> Sort(this IQueryable<Realty> realties, string orderByQueryString)
 		{
 			if (string.IsNullOrWhiteSpace(orderByQueryString))
-				return cities.OrderBy(e => e.Title);
+				return realties.OrderBy(e => e.Title);
 
 			var orderParams = orderByQueryString.Trim().Split(',');
-			var propertyInfos = typeof(City).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var propertyInfos = typeof(Realty).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 			var orderQueryBuilder = new StringBuilder();
 
 			foreach (var param in orderParams)
@@ -45,10 +45,9 @@ namespace Rent.Server.Repositories.Extensions
 
 			var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
 			if (string.IsNullOrWhiteSpace(orderQuery))
-				return cities.OrderBy(e => e.Title);
+				return realties.OrderBy(e => e.Title);
 
-			return cities.OrderBy(orderQuery);
+			return realties.OrderBy(orderQuery);
 		}
 	}
 }
-

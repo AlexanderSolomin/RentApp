@@ -1,11 +1,25 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Rent.Shared.Models
 {
-    public class AppUser : IdentityUser
-    {
-        public double Rate { get; set; } = 0;
-    }
+	public class AppUser : IdentityUser
+	{
+		public virtual ICollection<Realty> UserRealties { get; set; }
+		public virtual ICollection<UserFeedback> FeedbacksSent { get; set; }
+		public virtual ICollection<UserFeedback> FeedbacksRecieved { get; set; }
+        public virtual ICollection<Deal> DealsAsOwner { get; set; }
+        public virtual ICollection<Deal> DealsAsTenant { get; set; }
+		public double Rate { get; set; }
+
+		public AppUser()
+		{
+			FeedbacksSent = new HashSet<UserFeedback>();
+			FeedbacksRecieved = new HashSet<UserFeedback>();
+			UserRealties = new HashSet<Realty>();
+            DealsAsOwner = new HashSet<Deal>();
+            DealsAsTenant = new HashSet<Deal>();
+            Rate = 0;
+		}
+	}
 }

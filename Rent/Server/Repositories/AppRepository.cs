@@ -31,7 +31,7 @@ namespace Rent.Server.Repositories
             return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllExpr(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> predicate)
         {
             return await _dbContext.Set<T>()
                    .Where(predicate)

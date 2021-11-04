@@ -56,6 +56,7 @@ namespace Rent.Server
 
 			services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
 			services.AddScoped<ICityRepository, CityRepository>();
+			services.AddScoped<IRealtyRepository, RealtyRepository>();
 
 			services.AddCors(policy =>
 					{

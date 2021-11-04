@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Rent.Shared.Models
 {
@@ -7,6 +7,7 @@ namespace Rent.Shared.Models
 	{
 		public City()
 		{
+			CityRealties = new HashSet<Realty>();
 		}
 		[Required(ErrorMessage = "Обязательное поле")]
 		[StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]
@@ -17,6 +18,7 @@ namespace Rent.Shared.Models
         [Display(Name = "Субъект")]
 		public string Subject { get; set; }
 
+		[Required(ErrorMessage = "Обязательное поле")]
 		[Range(1, int.MaxValue, ErrorMessage = "Численность населения не может быть меньше 1")]
         [Display(Name = "Население")]
 		public int Population { get; set; }
@@ -24,5 +26,7 @@ namespace Rent.Shared.Models
         [Required(ErrorMessage = "Обязательное поле")]	        
         [Display(Name = "Регион")]
 	    public string District { get; set; }
+		
+		public virtual ICollection<Realty> CityRealties { get; set; }
 	}
 }
