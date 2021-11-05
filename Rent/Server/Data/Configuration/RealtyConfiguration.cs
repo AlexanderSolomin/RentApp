@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Rent.Shared.Models;
 
 namespace Rent.Server.Data.Configuration
@@ -11,11 +12,9 @@ namespace Rent.Server.Data.Configuration
 		{
 			builder.HasOne(d => d.RealtyCity)
 				.WithMany(p => p.CityRealties)
-				.HasForeignKey(d => d.RealtyCityId)
 				.OnDelete(DeleteBehavior.Cascade);
 			builder.HasOne(d => d.Owner)
 				.WithMany(p => p.UserRealties)
-				.HasForeignKey(d => d.OwnerId)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			Realty realty1 = new()
@@ -29,10 +28,27 @@ namespace Rent.Server.Data.Configuration
 				Rent = 40000,
 				Storeys = 18,
 				Floor = 8,
-				Category = Category.RESEDENTIAL,
+				Category = 0,
 				ImgPath = "../Shared/Img/1.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Owner = new AppUser
+				{
+					Id = "b74ddd14-6340-4840-95c2-db12554843e5",
+					UserName = "Admin",
+					Email = "admin@email.com",
+					NormalizedUserName = "ADMIN@EMAIL.COM",
+					NormalizedEmail = "ADMIN@EMAIL.COM",
+					LockoutEnabled = true,
+					SecurityStamp = Guid.NewGuid().ToString(),
+					PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "qwecxz")
+				},
+				RealtyCity = new City
+				{
+					Id = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf"),
+					District = "Северо-Западный",
+					Title = "Санкт-Петербург",
+					Population = 5384342,
+					Subject = "Санкт-Петербург"
+				}
 			};
 
 			Realty realty2 = new()
@@ -46,10 +62,8 @@ namespace Rent.Server.Data.Configuration
 				Rent = 300000,
 				Storeys = 6,
 				Floor = 5,
-				Category = Category.RESEDENTIAL,
-				ImgPath = "../Shared/Img/2.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Category = 0,
+				ImgPath = "../Shared/Img/2.jpg"
 			};
 
 			Realty realty3 = new()
@@ -63,10 +77,8 @@ namespace Rent.Server.Data.Configuration
 				Rent = 75000,
 				Storeys = 4,
 				Floor = 2,
-				Category = Category.RESEDENTIAL,
-				ImgPath = "../Shared/Img/3.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Category = 0,
+				ImgPath = "../Shared/Img/3.jpg"
 			};
 
 			Realty realty4 = new()
@@ -80,10 +92,8 @@ namespace Rent.Server.Data.Configuration
 				Rent = 2500000,
 				Storeys = 1,
 				Floor = 1,
-				Category = Category.COMMERCIAL,
-				ImgPath = "../Shared/Img/4.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Category = 0,
+				ImgPath = "../Shared/Img/4.jpg"
 			};
 
 			Realty realty5 = new()
@@ -97,10 +107,8 @@ namespace Rent.Server.Data.Configuration
 				Rent = 750000,
 				Storeys = 1,
 				Floor = 1,
-				Category = Category.INDUSTRIAL,
-				ImgPath = "../Shared/Img/5.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Category = 0,
+				ImgPath = "../Shared/Img/5.jpg"
 			};
 
 			Realty realty6 = new()
@@ -114,10 +122,9 @@ namespace Rent.Server.Data.Configuration
 				Rent = 750000,
 				Storeys = 1,
 				Floor = 1,
-				Category = Category.INDUSTRIAL,
-				ImgPath = "../Shared/Img/6.jpg",
-				OwnerId = Guid.Parse("bb6f8d03-d22b-4773-8b50-5236aee43af5").ToString(),
-				RealtyCityId = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf")
+				Category = 0,
+				ImgPath = "../Shared/Img/6.jpg"
+
 			};
 
 			// builder.HasData(realty1);

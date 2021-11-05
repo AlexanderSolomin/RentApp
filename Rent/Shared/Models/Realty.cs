@@ -67,21 +67,13 @@ namespace Rent.Shared.Models
 		[Display(Name = "Изображение")]
 		public string ImgPath { get; set; } = "../Shared/Img/DefaultRealty.jpg";
 
-		[Required]
 		[Display(Name = "Активно")]
 		public bool IsActive { get; set; } = true;
 
 		public virtual AppUser Owner { get; set; }
 
-		[Required]
-		public string OwnerId { get; set; }
-
 		public virtual City RealtyCity { get; set; }
 
-
-		[Required]
-		public Guid RealtyCityId { get; set; }
-
-		public virtual ICollection<Deal> RealtyDeals { get; set; }
+		public virtual ICollection<Deal> RealtyDeals { get; set; } = new List<Deal>();
 	}
 }
