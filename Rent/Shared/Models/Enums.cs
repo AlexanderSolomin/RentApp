@@ -9,8 +9,8 @@
 
     public enum Category
     {
-        RESEDENTIAL,
-        COMMERCIAL,
-        INDUSTRIAL
+        Жилая = 0,
+        Коммерческая = 1,
+        Промышленная = 2
     }   
 }

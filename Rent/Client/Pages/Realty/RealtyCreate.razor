@@ -1,0 +1,146 @@
+﻿@page "/realties/createRealty"
+@attribute [Authorize]
+@inject IRealtiesService realties
+@inject ICitiesService cities
+@inject AuthenticationStateProvider authProvider
+
+<h2>Новое предложение</h2>
+<EditForm Model="@_realty" OnValidSubmit="@Create" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <SuccessNotification @ref="_notification" />
+
+    <div class="form-group row">
+        <label for="title" class="col-md-2 col-form-label">Заголовок:</label>
+        <div class="col-md-10">
+            <InputText id="title" class="form-control" @bind-Value="_realty.Title" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="subject" class="col-md-2 col-form-label">Описание: </label>
+        <div class="col-md-10">
+            <InputText id="description" class="form-control" @bind-Value="_realty.Description" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="rooms" class="col-md-2 col-form-label">Комнаты: </label>
+        <div class="col-md-10">
+            <InputNumber id="rooms" class="form-control" @bind-Value="_realty.Rooms" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="buildYear" class="col-md-2 col-form-label">Год постройки: </label>
+        <div class="col-md-10">
+            <InputNumber id="buildYear" class="form-control" @bind-Value="_realty.BuildYear" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="area" class="col-md-2 col-form-label">Площадь: </label>
+        <div class="col-md-10">
+            <InputNumber id="area" class="form-control" @bind-Value="_realty.Area" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="rent" class="col-md-2 col-form-label">Стоимость: </label>
+        <div class="col-md-10">
+            <InputNumber id="rent" class="form-control" @bind-Value="_realty.Rent" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="storeys" class="col-md-2 col-form-label">Этажность здания: </label>
+        <div class="col-md-10">
+            <InputNumber id="storeys" class="form-control" @bind-Value="_realty.Storeys" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="floor" class="col-md-2 col-form-label">Этаж: </label>
+        <div class="col-md-10">
+            <InputNumber id="floor" class="form-control" @bind-Value="_realty.Floor" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="category" class="col-md-2 col-form-label">Категория: </label>
+        <div class="col-md-10">
+            <InputSelect id="category" class="form-control" @bind-Value="_realty.Category">
+                @foreach (var category in Enum.GetValues(typeof(Category)))
+                {
+                    <option value="@category">@category</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="city" class="col-md-2 col-form-label">Город: </label>
+        <div class="col-md-10">
+            <InputSelect id="category" class="form-control" @bind-Value="_realty.RealtyCity">
+                @foreach (var city in _citiesList)
+                {
+                    <option value="@city">@city.Title</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label for="image" class="col-md-2 col-form-label">Изображение:</label>
+        <div class="col-md-10">
+            <ImageUpload OnChange="AssignImageUrl" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">Создать</button>
+        </div>
+    </div>
+
+    <div>
+        <ul>
+            @foreach (var claim in authState.User.Claims)
+            {
+                <li><b>@claim.Type</b>: @claim.Value</li>
+            }
+        </ul>
+    </div>
+
+</EditForm>
+
+@code {
+    @*[CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }*@
+    AuthenticationState authState;
+
+    private Realty _realty = new();
+    private SuccessNotification _notification;
+    private void AssignImageUrl(string imgUrl) => _realty.ImgPath = imgUrl;
+    private List<City> _citiesList { get; set; } = new List<City>();
+
+    private async Task Create()
+    {
+
+        await realties.AddRealty(_realty);
+        _notification.Show();
+    }
+
+    private async Task GetCities()
+    {
+        var pagingResponse = await cities.GetCitiesPaged(new PagingParameters());
+        _citiesList = pagingResponse.Items;
+    }
+
+    protected override async Task OnInitializedAsync()
+         {
+             authState = await authProvider.GetAuthenticationStateAsync();
+         }
+
+    @*private async Task Auth()
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+            if (user.Identity.IsAuthenticated)
+                currentCount++;
+            else
+                currentCount--;
+        }*@
+}

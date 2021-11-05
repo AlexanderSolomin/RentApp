@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -13,18 +13,18 @@ using System.Linq;
 
 namespace Rent.Client.Services
 {
-    public class CitiesService : AppService<City>, ICitiesService
+    public class RealtiesService : AppService<Realty>, IRealtiesService
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _options;
 
-        public CitiesService(HttpClient httpClient) : base(httpClient)
+        public RealtiesService(HttpClient httpClient) : base(httpClient)
         {
             _httpClient = httpClient;
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
-        public async Task<PagedResponse<City>> GetCitiesPaged(PagingParameters pagingParameters)
+        public async Task<PagedResponse<Realty>> GetRealtiesPaged(PagingParameters pagingParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
@@ -32,15 +32,15 @@ namespace Rent.Client.Services
                 ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm,
                 ["orderBy"] = pagingParameters.OrderBy
             };
-            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/cities", queryStringParam));
+            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/realties", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApplicationException(content);
             }
-            var pagedResponse = new PagedResponse<City>
+            var pagedResponse = new PagedResponse<Realty>
             {
-                Items = JsonSerializer.Deserialize<List<City>>(content, _options),
+                Items = JsonSerializer.Deserialize<List<Realty>>(content, _options),
                 MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
             };
             foreach (var city in pagedResponse.Items)
@@ -65,22 +65,22 @@ namespace Rent.Client.Services
             }
         }
 
-        public async Task<City> GetCityById(string id)
+        public async Task<Realty> GetRealtyById(string id)
         {
-            return await _httpClient.GetFromJsonAsync<City>($"api/cities/{id}");
+            return await _httpClient.GetFromJsonAsync<Realty>($"api/realties/{id}");
         }
 
-        public async Task EditCity(City city)
+        public async Task EditRealty(Realty realty)
         {
-            await _httpClient.PutAsJsonAsync<City>($"api/cities/{city.Id}", city);
+            await _httpClient.PutAsJsonAsync<Realty>($"api/relties/{realty.Id}", realty);
         }
-        public async Task AddCity(City city)
+        public async Task AddRealty(Realty realty)
         {
-            await _httpClient.PostAsJsonAsync("api/cities", city);
+            await _httpClient.PostAsJsonAsync("api/realties", realty);
         }
-        public async Task DeleteCity(Guid id)
+        public async Task DeleteRealty(Guid id)
         {
-			await _httpClient.DeleteAsync($"api/cities/{id}");
+			await _httpClient.DeleteAsync($"api/realties/{id}");
         }
     }
 }

@@ -11,11 +11,9 @@ namespace Rent.Server.Data.Configuration
 		{
 			builder.HasOne(d => d.UserFrom)
                 .WithMany(p => p.FeedbacksSent)
-				.HasForeignKey(d => d.UserFromId)
                 .OnDelete(DeleteBehavior.Cascade);
 			builder.HasOne(d => d.UserTo)
 				.WithMany(p => p.FeedbacksRecieved)
-				.HasForeignKey(d => d.UserToId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 

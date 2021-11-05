@@ -1,5 +1,13 @@
-﻿<h3>Component1</h3>
+﻿@inject NavigationManager _navManager
+@inject PageHistoryState _pageState
 
 @code {
 
-}
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            _pageState.AddPage(_navManager.Uri);
+        }
+
+    }
+

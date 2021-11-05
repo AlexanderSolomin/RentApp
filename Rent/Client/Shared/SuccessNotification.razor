@@ -1,4 +1,6 @@
 @inject NavigationManager Navigation
+@inject PageHistoryState pageState
+@inherits BasePage
 
 <div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
     <div class="modal-dialog" role="document">
@@ -10,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Объект создан успешно</p>
+                <p>Операция применена успешно</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="Hide">Ок</button>
@@ -24,11 +26,11 @@
 }
 
 @code {
-	private string _modalDisplay;
+    private string _modalDisplay;
     private string _modalClass;
     private bool _showBackdrop;
 
-	 public void Show()
+    public void Show()
     {
         _modalDisplay = "block;";
         _modalClass = "show";
@@ -41,6 +43,6 @@
         _modalClass = "";
         _showBackdrop = false;
         StateHasChanged();
-        Navigation.NavigateTo("/cities");
+        Navigation.NavigateTo(pageState.PreviousPage());
     }
 }

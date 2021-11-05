@@ -25,20 +25,10 @@ namespace Rent.Shared.Models
 		[Display(Name = "Автор")]
 		public virtual AppUser UserFrom { get; set; }
 
-		[Required]
-		public string UserFromId { get; set; }
-
 		[Display(Name = "Получатель")]
 		public virtual AppUser UserTo { get; set; }
 
-		[Required]
-		public string UserToId { get; set; }
-
 		[Display(Name = "Сделка")]
 		public virtual Deal Deal { get; set; }
-
-		[Required]
-		public Guid DealId { get; set; }
-
 	}
 }

@@ -75,7 +75,7 @@ namespace Rent.Server.Data.Configuration
             user2.PasswordHash = phUser2.HashPassword(user, "cxzewq");
             user3.PasswordHash = phUser3.HashPassword(user, "cxzewq");
 
-            builder.HasData(adm);  
+            //builder.HasData(adm);  
             builder.HasData(user);  
             builder.HasData(user1);  
             builder.HasData(user2);  

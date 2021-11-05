@@ -22,19 +22,20 @@ namespace Rent.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddHttpClient<ICitiesService, CitiesService>("Rent.ServerAPI", 
+            builder.Services.AddHttpClient("Rent.ServerAPI", 
                 client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
  
-            // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Rent.ServerAPI"));
             
+            builder.Services.AddScoped<ICitiesService, CitiesService>();
+            builder.Services.AddScoped<IRealtiesService, RealtiesService>();
+
+            builder.Services.AddSingleton<PageHistoryState>();
+
             builder.Services.AddApiAuthorization();
 
             builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
-
-            //builder.Services.AddSyncfusionBlazor();
-            //builder.Services.AddScoped(typeof(AppDataAdaptor<>));
 
             await builder.Build().RunAsync();
         }

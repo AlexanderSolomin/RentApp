@@ -1,23 +1,23 @@
-@page "/cities"
+@page "/realties"
 @attribute [Authorize]
-@inject ICitiesService CityService
+@inject IRealtiesService realties
 
 <div class="row">
     <div class="col-md-4">
         <Search OnSearchChanged="SearchChanged" />
     </div>
-    @*<div class="col-md-4">
+    <div class="col-md-4">
         <Sort OnSortChanged="SortChanged" />
-    </div>*@
+    </div>
     <div class="col-md-2">
       
-            <a type="button" class="btn btn-warning" href="cities/createCity">Создать</a>
+            <a type="button" class="btn btn-warning" href="realties/createRealty">Создать</a>
 
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <CityTable Cities="CitiesList" OnDelete="DeleteCity" />
+        <RealtiesTable Realties="RealtiesList" OnDelete="DeleteRealty" />
     </div>
 </div>
 <div class="row">
@@ -28,13 +28,13 @@
 
 
 @code {
-    public List<City> CitiesList { get; set; } = new List<City>();
+    public List<Realty> RealtiesList { get; set; } = new List<Realty>();
     public MetaData MetaData { get; set; } = new MetaData();
     private PagingParameters _pagingParameters = new PagingParameters();
 
     protected async override Task OnInitializedAsync()
     {
-        await GetCities();
+        await GetRealties();
     }
 
     private async Task SearchChanged(string searchTerm)
@@ -42,34 +42,35 @@
         Console.WriteLine(searchTerm);
         _pagingParameters.PageNumber = 1;
         _pagingParameters.SearchTerm = searchTerm;
-        await GetCities();
+        await GetRealties();
     }
 
     private async Task SortChanged(string orderBy)
     {
         _pagingParameters.OrderBy = orderBy;
-        await GetCities();
+        await GetRealties();
     }
 
     private async Task SelectedPage(int page)
     {
         _pagingParameters.PageNumber = page;
-        await GetCities();
+        await GetRealties();
     }
 
 
-    private async Task DeleteCity(Guid id)
+    private async Task DeleteRealty(Guid id)
     {
-        await CityService.DeleteCity(id);
+        await realties.DeleteRealty(id);
         _pagingParameters.PageNumber = 1;
-        await GetCities();
+        await GetRealties();
     }
 
-    private async Task GetCities()
+    private async Task GetRealties()
     {
-        var pagingResponse = await CityService.GetCitiesPaged(_pagingParameters);
-        CitiesList = pagingResponse.Items;
+        var pagingResponse = await realties.GetRealtiesPaged(_pagingParameters);
+        RealtiesList = pagingResponse.Items;
         MetaData = pagingResponse.MetaData;
     }
+
 
 }

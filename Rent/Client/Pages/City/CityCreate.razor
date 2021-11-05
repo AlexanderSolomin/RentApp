@@ -31,12 +31,7 @@
             <InputText id="district" class="form-control" @bind-Value="_city.District" />
         </div>
     </div>
-    <div class="form-group row">
-        <label for="image" class="col-md-2 col-form-label">Изображение:</label>
-        <div class="col-md-10">
-            <ImageUpload OnChange="AssignImageUrl" />
-        </div>
-    </div>
+  
     <div class="row">
         <div class="col-md-12 text-right">
             <button type="submit" class="btn btn-success">Создать</button>
@@ -47,7 +42,6 @@
 @code {
     private City _city = new City();
     private SuccessNotification _notification;
-    private void AssignImageUrl(string imgUrl) => _city.District = imgUrl; //_city.ImageUrl = imgUrl;
     private async Task Create()
     {
         await CityService.AddCity(_city);

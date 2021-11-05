@@ -4,6 +4,7 @@ using Rent.Shared.Models;
 using Rent.Shared.Request;
 using Rent.Client.Features;
 using System.Net.Http;
+using System.Collections.Generic;
 
 namespace Rent.Client.Services
 {
@@ -15,6 +16,5 @@ namespace Rent.Client.Services
         Task EditCity(City city);
         Task DeleteCity(Guid id);
         Task<string> UploadImage(MultipartFormDataContent content);
-
     }
 }
