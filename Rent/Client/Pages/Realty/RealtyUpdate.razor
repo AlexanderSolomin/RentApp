@@ -73,7 +73,7 @@
         <div class="form-group row">
             <label for="city" class="col-md-2 col-form-label">Город: </label>
             <div class="col-md-10">
-                <InputSelect id="category" class="form-control" @bind-Value="_realty.RealtyCity">
+                <InputSelect id="category" class="form-control" @bind-Value="_realty.City">
                     @foreach (var city in _citiesList)
                         {
                         <option value="@city">@city.Title</option>
@@ -118,7 +118,7 @@
 
     private async Task GetCities()
     {
-        var pagingResponse = await cities.GetCitiesPaged(new PagingParameters());
+        var pagingResponse = await cities.GetCitiesPaged(new CityPagingParameters());
         _citiesList = pagingResponse.Items;
     }
 }

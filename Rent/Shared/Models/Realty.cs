@@ -70,9 +70,12 @@ namespace Rent.Shared.Models
 		[Display(Name = "Активно")]
 		public bool IsActive { get; set; } = true;
 
-		public virtual AppUser Owner { get; set; }
+        public virtual AppUser Owner { get; set; }
+		public string OwnerId { get; set; }
 
-		public virtual City RealtyCity { get; set; }
+		public virtual City City { get; set; }
+		[Required]
+		public Guid CityId { get; set; }
 
 		public virtual ICollection<Deal> RealtyDeals { get; set; } = new List<Deal>();
 	}

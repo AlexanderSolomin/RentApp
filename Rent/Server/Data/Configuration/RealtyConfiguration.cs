@@ -10,11 +10,13 @@ namespace Rent.Server.Data.Configuration
 	{
 		public void Configure(EntityTypeBuilder<Realty> builder)
 		{
-			builder.HasOne(d => d.RealtyCity)
+			builder.HasOne(d => d.City)
 				.WithMany(p => p.CityRealties)
+				.HasForeignKey(d => d.CityId)
 				.OnDelete(DeleteBehavior.Cascade);
 			builder.HasOne(d => d.Owner)
 				.WithMany(p => p.UserRealties)
+				.HasForeignKey(d => d.OwnerId)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			Realty realty1 = new()
@@ -41,7 +43,7 @@ namespace Rent.Server.Data.Configuration
 					SecurityStamp = Guid.NewGuid().ToString(),
 					PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "qwecxz")
 				},
-				RealtyCity = new City
+				City = new City
 				{
 					Id = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf"),
 					District = "Северо-Западный",

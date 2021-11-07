@@ -54,9 +54,12 @@ namespace Rent.Server
 			services.AddAuthentication()
 				.AddIdentityServerJwt();
 
+			services.AddAutoMapper(typeof(Startup));
 			services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
 			services.AddScoped<ICityRepository, CityRepository>();
 			services.AddScoped<IRealtyRepository, RealtyRepository>();
+			services.AddScoped<IAppUserRepository, AppUserRepository>();
+
 
 			services.AddCors(policy =>
 					{

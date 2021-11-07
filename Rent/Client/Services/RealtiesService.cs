@@ -9,7 +9,8 @@ using Rent.Shared.Request;
 using Rent.Client.Features;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
-using System.Linq;  
+using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Rent.Client.Services
 {
@@ -17,10 +18,12 @@ namespace Rent.Client.Services
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _options;
+        private readonly ILogger<RealtiesService> _logger;
 
-        public RealtiesService(HttpClient httpClient) : base(httpClient)
+        public RealtiesService(HttpClient httpClient, ILogger<RealtiesService> logger) : base(httpClient)
         {
             _httpClient = httpClient;
+            _logger = logger;
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
@@ -72,12 +75,15 @@ namespace Rent.Client.Services
 
         public async Task EditRealty(Realty realty)
         {
-            await _httpClient.PutAsJsonAsync<Realty>($"api/relties/{realty.Id}", realty);
+            await _httpClient.PutAsJsonAsync($"api/relties/{realty.Id}", realty);
         }
+
         public async Task AddRealty(Realty realty)
         {
-            await _httpClient.PostAsJsonAsync("api/realties", realty);
+            _logger.LogInformation($"{DateTime.Now}: Added realty with id {realty.Id}, owner: {realty.OwnerId}");
+            await _httpClient.PostAsJsonAsync("api/realties/", realty);
         }
+
         public async Task DeleteRealty(Guid id)
         {
 			await _httpClient.DeleteAsync($"api/realties/{id}");

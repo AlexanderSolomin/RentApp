@@ -10,6 +10,8 @@ using Rent.Shared.Models;
 using Rent.Shared.Request;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using AutoMapper;
+using Rent.Shared.Dto;
 
 namespace Rent.Server.Controllers
 {
@@ -20,10 +22,13 @@ namespace Rent.Server.Controllers
     {
         private readonly IRealtyRepository _repository;
         private readonly ILogger<Realty> _logger;
-        public RealtiesController(ILogger<Realty> logger, IRealtyRepository repository)
+        private readonly IMapper _mapper;
+
+        public RealtiesController(ILogger<Realty> logger, IRealtyRepository repository, IMapper mapper)
         {
-            this._logger = logger;
-            this._repository = repository;
+            _logger = logger;
+            _repository = repository;
+            _mapper = mapper;
         }
         
         // GET: 
@@ -32,9 +37,11 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var result = await _repository.GetRealties(pagingParameters);
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+                var realties = await _repository.GetRealties(pagingParameters);
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(realties.MetaData));
                 _logger.LogInformation($"{DateTime.Now}: Queried realties");
+
+                var result = _mapper.Map<IEnumerable<RealtyDto>>(realties);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -47,7 +54,7 @@ namespace Rent.Server.Controllers
 
         // GET: 
         [HttpGet("{id:Guid}")]
-        public async Task<ActionResult> GetRealtyById(Guid id)
+        public async Task<ActionResult> GetRealtyById(string id)
         {
             try
             {
@@ -70,7 +77,7 @@ namespace Rent.Server.Controllers
             {
                 if (realty == null)
                 {
-                    return BadRequest();
+                    return BadRequest("realty object is null");
                 }
        
                 await _repository.Add(realty);
@@ -95,7 +102,7 @@ namespace Rent.Server.Controllers
                 {
                     return BadRequest("Id mismatch");
                 }
-                var realtyToUpdate = await _repository.GetById(id);
+                var realtyToUpdate = await _repository.GetById(id.ToString());
                 if (realtyToUpdate == null)
                 {
                     return NotFound($"Realty with ID {id} not found");
@@ -118,7 +125,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var realtyToDelete = await _repository.GetById(id);
+                var realtyToDelete = await _repository.GetById(id.ToString());
                 if (realtyToDelete == null)
                 {
                     return NotFound($"Realty with ID {id} not found");

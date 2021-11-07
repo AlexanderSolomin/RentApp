@@ -10,7 +10,8 @@ namespace Rent.Client.Services
 {
     public interface ICitiesService : IAppService<City>
     {
-        Task<PagedResponse<City>> GetCitiesPaged(PagingParameters pagingParameters);
+        Task<IEnumerable<City>> GetCities();
+        Task<PagedResponse<City>> GetCitiesPaged(CityPagingParameters cityPagingParameters);
         Task<City> GetCityById(string Id);
         Task AddCity(City city);
         Task EditCity(City city);

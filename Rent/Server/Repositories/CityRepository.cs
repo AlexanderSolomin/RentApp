@@ -18,13 +18,13 @@ namespace Rent.Server.Repositories
 				_dbContext = dbContext;
 			}
 
-			public async Task<PagedList<City>> GetAllCities(PagingParameters pagingParameters)
+			public async Task<PagedList<City>> GetAllCities(CityPagingParameters cityPagingParameters)
 			{
 				var result = await _dbContext.Cities
-											.Search(pagingParameters.SearchTerm)
-											.OrderBy(pagingParameters.OrderBy)
+											.Search(cityPagingParameters.SearchTerm)
+											.OrderBy(cityPagingParameters.OrderBy)
 											.ToListAsync();
-				return PagedList<City>.ToPagedList(result, pagingParameters.PageNumber, pagingParameters.PageSize);
+				return PagedList<City>.ToPagedList(result, cityPagingParameters.PageNumber, cityPagingParameters.PageSize);
 			}
 			public async Task<City> GetCityByTitle(string title) 
 			{

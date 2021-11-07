@@ -7,7 +7,7 @@ namespace Rent.Server.Repositories
 {
     public interface ICityRepository : IAppRepository<City>
     {
-        Task<PagedList<City>> GetAllCities(PagingParameters pagingParameters);
+        Task<PagedList<City>> GetAllCities(CityPagingParameters cityPagingParameters);
         Task<City> GetCityByTitle(string title);
     }
 }

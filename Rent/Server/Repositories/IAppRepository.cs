@@ -10,7 +10,7 @@ namespace Rent.Server.Repositories
 {
     public interface IAppRepository<T>
     {
-        Task<T> GetById(Guid id);
+        Task<T> GetById(string id);
         Task<IEnumerable<T>> GetAll();
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> predicate);
         Task Add(T entity);

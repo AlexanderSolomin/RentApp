@@ -13,7 +13,7 @@ namespace Rent.Server.Data.Configuration
 		public void Configure(EntityTypeBuilder<City> builder)
 		{
 			var cities = new List<City>();
-			using (StreamReader sr = new StreamReader(@"./Data/Seed/addresses.json"))
+			using (StreamReader sr = new StreamReader(@"./Data/SeedJson/addresses.json"))
 			{
 				string json = sr.ReadToEnd();
 				cities = JsonConvert.DeserializeObject<List<City>>(json);
@@ -22,7 +22,17 @@ namespace Rent.Server.Data.Configuration
 			{
 				city.Id = Guid.NewGuid();
 			}
+
+			City spb = new()
+			{
+				Id = Guid.Parse("3edcd162-ec30-47ec-bc47-28b44c23efbf"),
+				District = "Северо-Западный",
+				Title = "Санкт-Петербург",
+				Population = 5384342,
+				Subject = "Санкт-Петербург"
+			};
 			builder.HasData(cities);
+			builder.HasData(spb);
 		}
 	}
 }

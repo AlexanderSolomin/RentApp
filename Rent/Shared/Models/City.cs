@@ -7,7 +7,6 @@ namespace Rent.Shared.Models
 	{
 		public City()
 		{
-			CityRealties = new HashSet<Realty>();
 		}
 		[Required(ErrorMessage = "Обязательное поле")]
 		[StringLength(60, ErrorMessage = "Название не может быть более 60 символов")]

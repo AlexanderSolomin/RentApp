@@ -2,45 +2,52 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Rent.Server.Repositories;
+using Rent.Shared.Dto;
+using Rent.Shared.Models;
 
 namespace Rent.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppUserController : ControllerBase
+    public class AppUsersController : ControllerBase
     {
-        // GET: api/AppUser
+        private readonly IAppUserRepository _repository;
+        private readonly ILogger<AppUser> _logger;
+        private readonly IMapper _mapper;
+
+
+        public AppUsersController(ILogger<AppUser> logger, IAppUserRepository repository, IMapper mapper)
+        {
+            _logger = logger;
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        // GET: api/AppUsers/
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> GetUsers()
         {
-            return new string[] { "value1", "value2" };
+            var users = await _repository.GetAllUsers();
+            //return Ok(_mapper.Map<IEnumerable<AppUserDto>>(users));
+            return Ok(users);
         }
 
-        // GET: api/AppUser/5
+        // GET: api/AppUsers/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public async Task<IActionResult> GetUserById (string id)
         {
-            return "value";
+            var user = await _repository.GetUserById(id);
+            _logger.LogInformation($"{DateTime.Now}: Get user Id {user.Id}");
+            //return Ok(_mapper.Map<AppUserDto>(user));
+            return Ok(user);
         }
 
-        // POST: api/AppUser
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
 
-        // PUT: api/AppUser/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/AppUser/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

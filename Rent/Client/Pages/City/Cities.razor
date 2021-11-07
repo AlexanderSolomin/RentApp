@@ -30,7 +30,7 @@
 @code {
     public List<City> CitiesList { get; set; } = new List<City>();
     public MetaData MetaData { get; set; } = new MetaData();
-    private PagingParameters _pagingParameters = new PagingParameters();
+    private CityPagingParameters _cityPagingParameters = new CityPagingParameters();
 
     protected async override Task OnInitializedAsync()
     {
@@ -40,20 +40,20 @@
     private async Task SearchChanged(string searchTerm)
     {
         Console.WriteLine(searchTerm);
-        _pagingParameters.PageNumber = 1;
-        _pagingParameters.SearchTerm = searchTerm;
+        _cityPagingParameters.PageNumber = 1;
+        _cityPagingParameters.SearchTerm = searchTerm;
         await GetCities();
     }
 
     private async Task SortChanged(string orderBy)
     {
-        _pagingParameters.OrderBy = orderBy;
+        _cityPagingParameters.OrderBy = orderBy;
         await GetCities();
     }
 
     private async Task SelectedPage(int page)
     {
-        _pagingParameters.PageNumber = page;
+        _cityPagingParameters.PageNumber = page;
         await GetCities();
     }
 
@@ -61,13 +61,13 @@
     private async Task DeleteCity(Guid id)
     {
         await CityService.DeleteCity(id);
-        _pagingParameters.PageNumber = 1;
+        _cityPagingParameters.PageNumber = 1;
         await GetCities();
     }
 
     private async Task GetCities()
     {
-        var pagingResponse = await CityService.GetCitiesPaged(_pagingParameters);
+        var pagingResponse = await CityService.GetCitiesPaged(_cityPagingParameters);
         CitiesList = pagingResponse.Items;
         MetaData = pagingResponse.MetaData;
     }

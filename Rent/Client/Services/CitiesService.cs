@@ -24,13 +24,18 @@ namespace Rent.Client.Services
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
-        public async Task<PagedResponse<City>> GetCitiesPaged(PagingParameters pagingParameters)
+        public async Task<IEnumerable<City>> GetCities()
+        {
+            return await _httpClient.GetFromJsonAsync<City[]>("api/cities");
+        }
+
+        public async Task<PagedResponse<City>> GetCitiesPaged(CityPagingParameters cityPagingParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
-                ["pageNumber"] = pagingParameters.PageNumber.ToString(),
-                ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm,
-                ["orderBy"] = pagingParameters.OrderBy
+                ["pageNumber"] = cityPagingParameters.PageNumber.ToString(),
+                ["searchTerm"] = cityPagingParameters.SearchTerm == null ? "" : cityPagingParameters.SearchTerm,
+                ["orderBy"] = cityPagingParameters.OrderBy
             };
             var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/cities", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
@@ -72,7 +77,7 @@ namespace Rent.Client.Services
 
         public async Task EditCity(City city)
         {
-            await _httpClient.PutAsJsonAsync<City>($"api/cities/{city.Id}", city);
+            await _httpClient.PutAsJsonAsync($"api/cities/{city.Id}", city);
         }
         public async Task AddCity(City city)
         {

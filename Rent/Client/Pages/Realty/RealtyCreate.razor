@@ -2,9 +2,16 @@
 @attribute [Authorize]
 @inject IRealtiesService realties
 @inject ICitiesService cities
+@inject IAppUserService users
 @inject AuthenticationStateProvider authProvider
 
 <h2>Новое предложение</h2>
+<p>
+    Владелец: @_currentUser.UserName
+</p>
+<p>
+    ID: @_currentUser.Id
+</p>
 <EditForm Model="@_realty" OnValidSubmit="@Create" class="card card-body bg-light mt-5">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -17,7 +24,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="subject" class="col-md-2 col-form-label">Описание: </label>
+        <label for="description" class="col-md-2 col-form-label">Описание: </label>
         <div class="col-md-10">
             <InputText id="description" class="form-control" @bind-Value="_realty.Description" />
         </div>
@@ -73,10 +80,10 @@
     <div class="form-group row">
         <label for="city" class="col-md-2 col-form-label">Город: </label>
         <div class="col-md-10">
-            <InputSelect id="category" class="form-control" @bind-Value="_realty.RealtyCity">
+            <InputSelect id="city" class="form-control" @bind-Value="_realty.CityId">
                 @foreach (var city in _citiesList)
                 {
-                    <option value="@city">@city.Title</option>
+                    <option value="@city.Id">@city.Title</option>
                 }
             </InputSelect>
         </div>
@@ -95,52 +102,39 @@
         </div>
     </div>
 
-    <div>
-        <ul>
-            @foreach (var claim in authState.User.Claims)
-            {
-                <li><b>@claim.Type</b>: @claim.Value</li>
-            }
-        </ul>
-    </div>
+
+
 
 </EditForm>
 
 @code {
-    @*[CascadingParameter]
-    public Task<AuthenticationState> AuthState { get; set; }*@
     AuthenticationState authState;
-
     private Realty _realty = new();
+    private AppUser _currentUser = new();
     private SuccessNotification _notification;
     private void AssignImageUrl(string imgUrl) => _realty.ImgPath = imgUrl;
     private List<City> _citiesList { get; set; } = new List<City>();
 
     private async Task Create()
     {
-
+        _realty.OwnerId = _currentUser.Id;
         await realties.AddRealty(_realty);
         _notification.Show();
     }
 
-    private async Task GetCities()
+    private async Task<IEnumerable<City>> GetCities()
     {
-        var pagingResponse = await cities.GetCitiesPaged(new PagingParameters());
-        _citiesList = pagingResponse.Items;
+        var pagingResponse = await cities.GetCitiesPaged(new CityPagingParameters());
+        _citiesList = pagingResponse.Items.ToList();
+        return _citiesList;
     }
 
     protected override async Task OnInitializedAsync()
-         {
-             authState = await authProvider.GetAuthenticationStateAsync();
-         }
+    {
+        authState = await authProvider.GetAuthenticationStateAsync();
+        string userId = authState.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        _currentUser = await users.GetUserById(userId);
+        _citiesList = (await cities.GetCities()).ToList();
+    }
 
-    @*private async Task Auth()
-        {
-            var authState = await AuthState;
-            var user = authState.User;
-            if (user.Identity.IsAuthenticated)
-                currentCount++;
-            else
-                currentCount--;
-        }*@
 }

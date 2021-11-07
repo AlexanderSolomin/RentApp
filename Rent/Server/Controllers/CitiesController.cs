@@ -10,6 +10,9 @@ using Rent.Shared.Models;
 using Rent.Shared.Request;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using Rent.Shared.Dto;
 
 namespace Rent.Server.Controllers
 {
@@ -20,21 +23,27 @@ namespace Rent.Server.Controllers
     {
         private readonly ICityRepository _repository;
         private readonly ILogger<City> _logger;
-        public CitiesController(ILogger<City> logger, ICityRepository repository)
+        private readonly IMapper _mapper;
+
+        public CitiesController(ILogger<City> logger, ICityRepository repository, IMapper mapper)
         {
-            this._logger = logger;
-            this._repository = repository;
+            _logger = logger;
+            _repository = repository;
+            _mapper = mapper;
         }
-        
+
         // GET: 
         [HttpGet]
-        public async Task<ActionResult> GetCities([FromQuery] PagingParameters pagingParameters)
+        public async Task<ActionResult> GetCities([FromQuery] CityPagingParameters cityPagingParameters)
         {
             try
             {
-                var result = await _repository.GetAllCities(pagingParameters);
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+                var cities = await _repository.GetAllCities(cityPagingParameters);
                 _logger.LogInformation($"{DateTime.Now}: Queried all the cities");
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(cities.MetaData));
+
+                var result = _mapper.Map<IEnumerable<CityDto>>(cities);
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -47,7 +56,7 @@ namespace Rent.Server.Controllers
 
         // GET: 
         [HttpGet("{title}")]
-        public async Task<ActionResult> GetCityByTitle(string title)
+        public async Task<ActionResult<City>> GetCityByTitle(string title)
         {
             try
             {
@@ -65,12 +74,12 @@ namespace Rent.Server.Controllers
 
         // GET: 
         [HttpGet("{id:Guid}")]
-        public async Task<ActionResult> GetCityById(Guid id)
+        public async Task<ActionResult<City>> GetCityById(Guid id)
         {
             try
             {
                 _logger.LogInformation($"{DateTime.Now}: Getting city by ID");
-                return Ok(await _repository.GetById(id));
+                return Ok(await _repository.GetById(id.ToString()));
             }
             catch (Exception ex)
             {
@@ -118,7 +127,7 @@ namespace Rent.Server.Controllers
                 {
                     return BadRequest("Id mismatch");
                 }
-                var cityToUpdate = await _repository.GetById(id);
+                var cityToUpdate = await _repository.GetById(id.ToString());
                 if (cityToUpdate == null)
                 {
                     return NotFound($"City with ID {id} not found");
@@ -141,7 +150,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var cityToDelete = await _repository.GetById(id);
+                var cityToDelete = await _repository.GetById(id.ToString());
                 if (cityToDelete == null)
                 {
                     return NotFound($"City with ID {id} not found");

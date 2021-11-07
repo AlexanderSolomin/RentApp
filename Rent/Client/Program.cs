@@ -25,11 +25,16 @@ namespace Rent.Client
             builder.Services.AddHttpClient("Rent.ServerAPI", 
                 client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
- 
+
+            builder.Services.AddLogging();
+            builder.Logging.SetMinimumLevel(LogLevel.Debug);
+
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Rent.ServerAPI"));
             
             builder.Services.AddScoped<ICitiesService, CitiesService>();
             builder.Services.AddScoped<IRealtiesService, RealtiesService>();
+            builder.Services.AddScoped<IAppUserService, AppUserService>();
+
 
             builder.Services.AddSingleton<PageHistoryState>();
 
