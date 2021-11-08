@@ -1,0 +1,57 @@
+﻿@page "/realties/{Id}"
+@attribute [Authorize]
+@inject IRealtiesService realties
+
+@if (_realty != null)
+{
+    <p>ID предложения @_realty.Id</p>
+    <p>Владелец: @_realty.OwnerId</p>
+    <EditForm Model="@_realty" OnValidSubmit="@DealCreate" class="card card-body bg-light mt-5">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <SuccessNotification @ref="_notification" />
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                <img src="@_realty.ImgPath" alt="..." width="500" align="right">
+            </div>
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@_realty.Title</h5>
+                        <p class="card-text">@_realty.Description</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Отзывы о владельце</li>
+                        <li class="list-group-item">Отзывы о недвижимости</li>
+                    </ul>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-outline-primary">Начать сделку</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</EditForm>
+    <SuccessNotification @ref="_notification" />
+}
+
+@code {
+    private Realty _realty;
+    private SuccessNotification _notification;
+
+    [Parameter]
+    public string Id { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        _realty = await realties.GetRealtyById(Id);
+    }
+    private async Task DealCreate()
+    {
+        await realties.EditRealty(_realty);
+        _notification.Show();
+    }
+
+}

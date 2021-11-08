@@ -4,9 +4,10 @@ using Rent.Shared.Models;
 
 namespace Rent.Server.Repositories
 {
-    public interface IAppUserRepository// : IAppRepository<AppUser>
+    public interface IAppUserRepository : IAppRepository<AppUser>
     {
         Task<AppUser> GetUserById(string id);
         Task<IEnumerable<AppUser>> GetAllUsers();
+        Task<AppUser> GetUserRealties(string id);
     }
 }

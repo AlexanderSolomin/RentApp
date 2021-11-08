@@ -15,7 +15,7 @@ namespace Rent.Client.Services
         }
         public async Task<AppUser> GetUserById(string id)
         {
-            return await _httpClient.GetFromJsonAsync<AppUser>($"api/appusers/{id}");
+            return await _httpClient.GetFromJsonAsync<AppUser>($"api/appuser/{id}");
         }
 
     }

@@ -1,11 +1,43 @@
-﻿{
-  "ConnectionStrings": {
-    "DefaultConnection": "DataSource=app.db"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
+﻿@inject NavigationManager NavigationManager
+
+@if (Realties.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"> Заголовок </th>
+                <th scope="col"> Описание </th>
+                <th scope="col"> Стоимость </th>
+                <th scope="col"> Комнат </th>
+                <th scope="col"> Этаж </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var realty in Realties)
+            {
+                <tr>
+                    <td>
+                        <img src="@realty.ImgPath" alt="realty image" style="width:100px;" />
+                    </td>
+                    <td class="align-middle">@realty.Title</td>
+                    <td class="align-middle">@realty.Description</td>
+                    <td class="align-middle">@realty.Rent</td>
+                    <td class="align-middle">@realty.Rooms</td>
+                    <td class="align-middle">@realty.Floor / @realty.Storeys</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span>
+        Загружаю предложения...
+    </span>
+}
+@code {
+    [Parameter]
+    public List<Realty> Realties { get; set; }
+
 }

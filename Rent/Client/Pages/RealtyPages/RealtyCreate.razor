@@ -5,7 +5,7 @@
 @inject IAppUserService users
 @inject AuthenticationStateProvider authProvider
 
-<h2>Новое предложение</h2>
+<h2>Новое предложение ID @_realty.Id</h2>
 <p>
     Владелец: @_currentUser.UserName
 </p>
@@ -26,7 +26,7 @@
     <div class="form-group row">
         <label for="description" class="col-md-2 col-form-label">Описание: </label>
         <div class="col-md-10">
-            <InputText id="description" class="form-control" @bind-Value="_realty.Description" />
+            <InputTextArea id="description" class="form-control" @bind-Value="_realty.Description" />
         </div>
     </div>
     <div class="form-group row">
@@ -89,7 +89,6 @@
         </div>
     </div>
 
-
     <div class="form-group row">
         <label for="image" class="col-md-2 col-form-label">Изображение:</label>
         <div class="col-md-10">
@@ -101,10 +100,7 @@
             <button type="submit" class="btn btn-success">Создать</button>
         </div>
     </div>
-
-
-
-
+    <SuccessNotification @ref="_notification" />
 </EditForm>
 
 @code {

@@ -1,0 +1,14 @@
+﻿<div class="card">
+    <img src="@RealtySum.ImgPath" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">@RealtySum.Title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@RealtySum.Description</h6>
+        <p class="card-text">@RealtySum.Rent ₽</p>
+        <a href="/realties/{@RealtySum.Id}" class="btn btn-primary">Детали</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Realty RealtySum { get; set; }
+}

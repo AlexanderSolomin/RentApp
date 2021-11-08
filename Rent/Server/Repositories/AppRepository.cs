@@ -21,7 +21,7 @@ namespace Rent.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<T> GetById(string id)
+        public async Task<T> GetById(Guid id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }

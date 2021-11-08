@@ -1,4 +1,4 @@
-@page "/realties"
+@page "/dashboard"
 @attribute [Authorize]
 @inject IRealtiesService realties
 
@@ -10,14 +10,14 @@
         <Sort OnSortChanged="SortChanged" />
     </div>
     <div class="col-md-2">
-      
-            <a type="button" class="btn btn-warning" href="realties/createRealty">Создать</a>
+
+        <a type="button" class="btn btn-warning" href="realties/createRealty">Создать</a>
 
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <RealtiesTable Realties="RealtiesList" OnDelete="DeleteRealty" />
+        <RealtiesUserTable Realties="RealtiesList" OnDelete="DeleteRealty" />
     </div>
 </div>
 <div class="row">

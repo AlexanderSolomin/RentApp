@@ -32,15 +32,10 @@
 			<InputText id="district" class="form-control" @bind-Value="_city.District" />
 		</div>
 	</div>
-	<div class="form-group row">
-		<label for="image" class="col-md-2 col-form-label">Изображение:</label>
-		<div class="col-md-10">
-		      <ImageUpload ImgUrl="@_city.Subject" OnChange="AssignImageUrl" />
-            </div>
-        </div>
+
 	<div class="row">
 		<div class="col-md-12 text-right">
-			<button type="submit" class="btn btn-success">Обновить</button>
+            <button type="submit" class="btn btn-success">Сохранить</button>
 		</div>
 	</div>
 </EditForm>
@@ -62,5 +57,4 @@
 		await CityService.EditCity(_city);
 		_notification.Show();
 	}
-	private void AssignImageUrl(string imgUrl) => _city.Subject = imgUrl;
 }

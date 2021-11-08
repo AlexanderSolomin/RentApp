@@ -42,9 +42,9 @@ namespace Rent.Server.Controllers
                 _logger.LogInformation($"{DateTime.Now}: Queried all the cities");
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(cities.MetaData));
 
-                var result = _mapper.Map<IEnumerable<CityDto>>(cities);
+                //var result = _mapper.Map<IEnumerable<CityDto>>(cities);
 
-                return Ok(result);
+                return Ok(cities);
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace Rent.Server.Controllers
             try
             {
                 _logger.LogInformation($"{DateTime.Now}: Getting city by ID");
-                return Ok(await _repository.GetById(id.ToString()));
+                return Ok(await _repository.GetById(id));
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace Rent.Server.Controllers
                 {
                     return BadRequest("Id mismatch");
                 }
-                var cityToUpdate = await _repository.GetById(id.ToString());
+                var cityToUpdate = await _repository.GetById(id);
                 if (cityToUpdate == null)
                 {
                     return NotFound($"City with ID {id} not found");
@@ -150,7 +150,7 @@ namespace Rent.Server.Controllers
         {
             try
             {
-                var cityToDelete = await _repository.GetById(id.ToString());
+                var cityToDelete = await _repository.GetById(id);
                 if (cityToDelete == null)
                 {
                     return NotFound($"City with ID {id} not found");

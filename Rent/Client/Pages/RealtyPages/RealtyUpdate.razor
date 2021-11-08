@@ -3,13 +3,15 @@
 @inject IRealtiesService realties
 @inject ICitiesService cities
 
-
-<h2>Обновить данные</h2>
 @if (_realty != null)
 {
+    <p>ID предложения @_realty.Id</p>
+    <p>Владелец: @_realty.OwnerId</p>
     <EditForm Model="@_realty" OnValidSubmit="@Update" class="card card-body bg-light mt-5">
         <DataAnnotationsValidator />
         <ValidationSummary />
+        <SuccessNotification @ref="_notification" />
+
         <div class="form-group row">
             <label for="title" class="col-md-2 col-form-label">Заголовок:</label>
             <div class="col-md-10">
@@ -17,9 +19,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="subject" class="col-md-2 col-form-label">Описание: </label>
+            <label for="description" class="col-md-2 col-form-label">Описание: </label>
             <div class="col-md-10">
-                <InputText id="description" class="form-control" @bind-Value="_realty.Description" />
+                <InputTextArea id="description" class="form-control" @bind-Value="_realty.Description" />
             </div>
         </div>
         <div class="form-group row">
@@ -64,49 +66,50 @@
             <div class="col-md-10">
                 <InputSelect id="category" class="form-control" @bind-Value="_realty.Category">
                     @foreach (var category in Enum.GetValues(typeof(Category)))
-                        {
-                        <option value="@category">@category</option>
-                        }
-                </InputSelect>
-            </div>
+                    {
+                    <option value="@category">@category</option>
+                    }
+            </InputSelect>
         </div>
-        <div class="form-group row">
-            <label for="city" class="col-md-2 col-form-label">Город: </label>
-            <div class="col-md-10">
-                <InputSelect id="category" class="form-control" @bind-Value="_realty.City">
-                    @foreach (var city in _citiesList)
-                        {
-                        <option value="@city">@city.Title</option>
-                        }
-                </InputSelect>
-            </div>
+    </div>
+    <div class="form-group row">
+        <label for="city" class="col-md-2 col-form-label">Город: </label>
+        <div class="col-md-10">
+            <InputSelect id="city" class="form-control" @bind-Value="_realty.CityId">
+                @foreach (var city in _citiesList)
+                    {
+                    <option value="@city.Id">@city.Title</option>
+                    }
+            </InputSelect>
         </div>
+    </div>
 
-        <div class="form-group row">
-            <label for="image" class="col-md-2 col-form-label">Изображение:</label>
-            <div class="col-md-10">
-                <ImageUpload OnChange="AssignImageUrl" />
-            </div>
+    <div class="form-group row">
+        <label for="image" class="col-md-2 col-form-label">Изображение:</label>
+        <div class="col-md-10">
+            <ImageUpload OnChange="AssignImageUrl" />
         </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-success">Обновить</button>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">Сохранить</button>
         </div>
-    </EditForm>
+    </div>
+</EditForm>
     <SuccessNotification @ref="_notification" />
 }
 
 @code {
     private Realty _realty;
     private SuccessNotification _notification;
+    private void AssignImageUrl(string imgUrl) => _realty.ImgPath = imgUrl;
     private List<City> _citiesList { get; set; } = new List<City>();
-
 
     [Parameter]
     public string Id { get; set; }
     protected async override Task OnInitializedAsync()
     {
+        _citiesList = (await cities.GetCities()).ToList();
         _realty = await realties.GetRealtyById(Id);
     }
     private async Task Update()
@@ -114,11 +117,12 @@
         await realties.EditRealty(_realty);
         _notification.Show();
     }
-    private void AssignImageUrl(string imgUrl) => _realty.ImgPath = imgUrl;
 
-    private async Task GetCities()
+    private async Task<IEnumerable<City>> GetCities()
     {
         var pagingResponse = await cities.GetCitiesPaged(new CityPagingParameters());
-        _citiesList = pagingResponse.Items;
+        _citiesList = pagingResponse.Items.ToList();
+        return _citiesList;
     }
+
 }

@@ -7,23 +7,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Rent.Server.Repositories
 {
-    public class AppUserRepository : IAppUserRepository
+    public class AppUserRepository : AppRepository<AppUser>, IAppUserRepository
 	{
-		//private readonly AppDbContext _dbContext;
+		private readonly AppDbContext _dbContext;
 		private readonly UserManager<AppUser> _userManager;
 
-		public AppUserRepository(UserManager<AppUser> userManager) //: base(dbContext)
+		public AppUserRepository(UserManager<AppUser> userManager, AppDbContext dbContext) : base(dbContext)
 		{
 			_userManager = userManager;
+			_dbContext = dbContext;
 		}
+
 		public async Task<AppUser> GetUserById(string id)
 		{
-			return await _userManager.FindByIdAsync(id);//_dbContext.Users.FindAsync(id);
+			return await _userManager.FindByIdAsync(id);
 		}
+
 		public async Task<IEnumerable<AppUser>> GetAllUsers()
         {
 			return await _userManager.Users.ToListAsync();
         }
 
+		public Task<AppUser> GetUserRealties(string id)
+		{
+			var user = _dbContext.Users.Include(r => r.UserRealties).FirstOrDefaultAsync();
+			return user;	
+		}
 	}
 }

@@ -8,5 +8,6 @@ namespace Rent.Server.Repositories
     public interface IRealtyRepository : IAppRepository<Realty>
     {
         Task<PagedList<Realty>> GetRealties(PagingParameters pagingParameters);
+        Task<PagedList<Realty>> GetUserRealties(PagingParameters pagingParameters);
     }
 }

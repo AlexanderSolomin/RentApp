@@ -1,0 +1,76 @@
+@page "/realties"
+@attribute [Authorize]
+@inject IRealtiesService realties
+
+<div class="row">
+    <div class="col-md-4">
+        <Search OnSearchChanged="SearchChanged" />
+    </div>
+    <div class="col-md-4">
+        <Sort OnSortChanged="SortChanged" />
+    </div>
+    <div class="col-md-2">
+      
+            <a type="button" class="btn btn-warning" href="realties/createRealty">Создать</a>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <RealtiesUserTable Realties="RealtiesList" OnDelete="DeleteRealty" />
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <Pagination MetaData="MetaData" Spread="1" SelectedPage="SelectedPage" />
+    </div>
+</div>
+
+
+@code {
+    public List<Realty> RealtiesList { get; set; } = new List<Realty>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private PagingParameters _pagingParameters = new PagingParameters();
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetRealties();
+    }
+
+    private async Task SearchChanged(string searchTerm)
+    {
+        Console.WriteLine(searchTerm);
+        _pagingParameters.PageNumber = 1;
+        _pagingParameters.SearchTerm = searchTerm;
+        await GetRealties();
+    }
+
+    private async Task SortChanged(string orderBy)
+    {
+        _pagingParameters.OrderBy = orderBy;
+        await GetRealties();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _pagingParameters.PageNumber = page;
+        await GetRealties();
+    }
+
+
+    private async Task DeleteRealty(Guid id)
+    {
+        await realties.DeleteRealty(id);
+        _pagingParameters.PageNumber = 1;
+        await GetRealties();
+    }
+
+    private async Task GetRealties()
+    {
+        var pagingResponse = await realties.GetRealtiesPaged(_pagingParameters);
+        RealtiesList = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+
+
+}

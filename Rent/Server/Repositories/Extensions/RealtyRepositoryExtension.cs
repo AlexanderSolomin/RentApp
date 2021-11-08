@@ -14,8 +14,7 @@ namespace Rent.Server.Repositories.Extensions
 	{
 		public static IQueryable<Realty> Search(this IQueryable<Realty> realties, string searchTerm)
 		{
-			if (string.IsNullOrWhiteSpace(searchTerm))
-				return realties;
+			if (string.IsNullOrWhiteSpace(searchTerm)) return realties;
 			return realties.Where(p => p.Title.ToLower().Contains(searchTerm.Trim().ToLower()));
 		}
 

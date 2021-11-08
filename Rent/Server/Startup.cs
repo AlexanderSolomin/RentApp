@@ -78,6 +78,7 @@ namespace Rent.Server
 			});
 
 			services.AddControllersWithViews();
+
 			services.AddRazorPages();
 		}
 

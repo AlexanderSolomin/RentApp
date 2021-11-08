@@ -75,7 +75,7 @@ namespace Rent.Client.Services
 
         public async Task EditRealty(Realty realty)
         {
-            await _httpClient.PutAsJsonAsync($"api/relties/{realty.Id}", realty);
+            await _httpClient.PutAsJsonAsync($"api/realties/{realty.Id}", realty);
         }
 
         public async Task AddRealty(Realty realty)
