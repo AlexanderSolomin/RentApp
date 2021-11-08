@@ -4,7 +4,7 @@ namespace Rent.Shared.Request
     {
 		const int maxPageSize = 1000; 
 		public int PageNumber { get; set; } = 1; 
-		private int _pageSize = 10; 
+		private int _pageSize = 3; 
 		public int PageSize 
 		{ 
 			get 

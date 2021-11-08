@@ -24,15 +24,12 @@ namespace Rent.Shared.Models
 
 
 		public virtual AppUser UserFrom { get; set; }
-		[Required]
 		public string UserFromId { get; set; }
 
 		public virtual AppUser UserTo { get; set; }
-		[Required]
 		public string UserToId { get; set; }
 
 		public virtual Deal Deal { get; set; }
-		[Required]
 		public Guid DealId { get; set; }
 	}
 }

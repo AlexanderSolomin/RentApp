@@ -14,6 +14,8 @@ using Rent.Shared.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
+using Microsoft.OpenApi.Models;
+
 
 namespace Rent.Server
 {
@@ -78,8 +80,13 @@ namespace Rent.Server
 			});
 
 			services.AddControllersWithViews();
+			services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "RentApp", Version = "v1" });
+			});
 
 			services.AddRazorPages();
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,6 +127,11 @@ namespace Rent.Server
 				endpoints.MapRazorPages();
 				endpoints.MapControllers();
 				endpoints.MapFallbackToFile("index.html");
+			});
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "RentApp V1");
 			});
 		}
 	}

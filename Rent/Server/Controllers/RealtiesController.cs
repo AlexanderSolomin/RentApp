@@ -35,7 +35,6 @@ namespace Rent.Server.Controllers
         }
 
         // GET:
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> GetRealties([FromQuery] PagingParameters pagingParameters)
         {
@@ -45,7 +44,7 @@ namespace Rent.Server.Controllers
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(realties.MetaData));
                 _logger.LogInformation($"{DateTime.Now}: Queried realties");
 
-                //var result = _mapper.Map<IEnumerable<RealtyDto>>(realties);
+                var result = _mapper.Map<IEnumerable<RealtyDto>>(realties);
                 return Ok(realties);
             }
             catch (Exception ex)

@@ -74,7 +74,6 @@ namespace Rent.Shared.Models
 		public string OwnerId { get; set; }
 
 		public virtual City City { get; set; }
-		[Required]
 		public Guid CityId { get; set; }
 
 		public virtual ICollection<Deal> RealtyDeals { get; set; } = new List<Deal>();
