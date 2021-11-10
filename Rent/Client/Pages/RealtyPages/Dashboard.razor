@@ -39,7 +39,6 @@
 
     private async Task SearchChanged(string searchTerm)
     {
-        Console.WriteLine(searchTerm);
         _pagingParameters.PageNumber = 1;
         _pagingParameters.SearchTerm = searchTerm;
         await GetRealties();
