@@ -1,0 +1,34 @@
+@inject NavigationManager NavigationManager
+
+@if (Realties.Count > 0)
+{
+
+
+	@foreach (var realty in Realties)
+	{
+		<div class="col-4">
+			<div class="card">
+				<img src="@realty.ImgPath" class="card-img-top" alt="...">
+				<div class="card-body">
+					<h5 class="card-title">@realty.Title</h5>
+					<h6 class="card-subtitle mb-2 text-muted">@realty.Description</h6>
+					<p class="card-text">@realty.Rent ₽</p>
+					<button type="button" class="btn btn-primary" @onclick="() => RedirectToDetails(realty.Id)">Детали</button>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+
+
+
+@code {
+	[Parameter]
+	public List<Realty> Realties { get; set; }
+	private void RedirectToDetails(Guid id)
+	{
+		var url = Path.Combine("realties", id.ToString(), "details");
+		NavigationManager.NavigateTo(url);
+	}
+}
