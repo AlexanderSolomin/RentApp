@@ -17,14 +17,16 @@ namespace Rent.Client.Services
     public class RealtiesService : AppService<Realty>, IRealtiesService
     {
         private readonly HttpClient _httpClient;
+        private readonly PublicClient _publicClient;
         private readonly JsonSerializerOptions _options;
         private readonly ILogger<RealtiesService> _logger;
 
-        public RealtiesService(HttpClient httpClient, ILogger<RealtiesService> logger) : base(httpClient)
+        public RealtiesService(HttpClient httpClient, ILogger<RealtiesService> logger, PublicClient publicClient) : base(httpClient)
         {
             _httpClient = httpClient;
             _logger = logger;
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            _publicClient = publicClient;
         }
 
         public async Task<PagedResponse<Realty>> GetRealtiesPaged(PagingParameters pagingParameters)
@@ -35,7 +37,7 @@ namespace Rent.Client.Services
                 ["searchTerm"] = pagingParameters.SearchTerm == null ? "" : pagingParameters.SearchTerm,
                 ["orderBy"] = pagingParameters.OrderBy
             };
-            var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString("api/realties", queryStringParam));
+            var response = await _publicClient.Client.GetAsync(QueryHelpers.AddQueryString("api/realties", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {

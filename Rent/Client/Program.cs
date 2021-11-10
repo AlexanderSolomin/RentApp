@@ -25,6 +25,9 @@ namespace Rent.Client
             builder.Services.AddHttpClient("Rent.ServerAPI", 
                 client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            builder.Services.AddHttpClient<PublicClient>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+
+
 
             builder.Services.AddLogging();
             builder.Logging.SetMinimumLevel(LogLevel.Debug);

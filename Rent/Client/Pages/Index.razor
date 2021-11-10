@@ -4,7 +4,7 @@
 
     @if (IsLoading)
     {
-        <span>Loading...</span>
+        <span>Загружаю предложения...</span>
     }
 
     <div class="row">
@@ -21,7 +21,7 @@
         @foreach (var realty in RealtiesList)
         {
             <div class="col-4">
-                <RealtiesSummary RealtySum="@realty" />
+                <RealtiesMain RealtyMain="@realty" />
             </div>
         }
 

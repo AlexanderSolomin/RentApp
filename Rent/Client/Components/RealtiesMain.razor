@@ -1,0 +1,21 @@
+@inject NavigationManager NavigationManager
+
+<div class="card">
+    <img src="@RealtyMain.ImgPath" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">@RealtyMain.Title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@RealtyMain.Description</h6>
+        <p class="card-text">@RealtyMain.Rent ₽</p>
+		<button type="button" class="btn btn-primary" @onclick="() => RedirectToDetails(RealtyMain.Id)">Детали</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Realty RealtyMain { get; set; }
+	private void RedirectToDetails(Guid id)
+    {
+        var url = Path.Combine("realties", id.ToString(), "details");
+        NavigationManager.NavigateTo(url);
+    }
+}
