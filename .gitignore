@@ -11,6 +11,10 @@ autom4te.cache/
 tarballs/
 test-results/
 Img/*
+*.png
+*.jpg
+*.jpeg
+
 
 # Mac bundle stuff
 *.dmg

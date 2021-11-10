@@ -12,10 +12,12 @@ using Rent.Server.Repositories;
 using Rent.Shared.Dto;
 using Rent.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Rent.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AppUserController : ControllerBase

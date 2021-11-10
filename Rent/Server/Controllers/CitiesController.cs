@@ -16,7 +16,7 @@ using Rent.Shared.Dto;
 
 namespace Rent.Server.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CitiesController : ControllerBase

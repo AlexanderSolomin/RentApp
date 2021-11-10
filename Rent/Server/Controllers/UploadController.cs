@@ -3,9 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Rent.Server.Controllers
 {
+	[Authorize]
 	[Route("api/upload/")]
 	[ApiController]
 	public class UploadController : ControllerBase

@@ -5,14 +5,11 @@
 @inject IAppUserService users
 @inject AuthenticationStateProvider authProvider
 
-<h2>Новое предложение ID @_realty.Id</h2>
+<h5>Новое предложение ID @_realty.Id</h5>
 <p>
     Владелец: @_currentUser.UserName
 </p>
-<p>
-    ID: @_currentUser.Id
-</p>
-<EditForm Model="@_realty" OnValidSubmit="@Create" class="card card-body bg-light mt-5">
+<EditForm Model="@_realty" OnValidSubmit="@Create" class="card card-body bg-light mt-5" width = "70%">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <SuccessNotification @ref="_notification" />
@@ -36,7 +33,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="buildYear" class="col-md-2 col-form-label">Год постройки: </label>
+        <label for="buildYear" class="col-md-2 col-form-label">Год: </label>
         <div class="col-md-10">
             <InputNumber id="buildYear" class="form-control" @bind-Value="_realty.BuildYear" />
         </div>
@@ -54,7 +51,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="storeys" class="col-md-2 col-form-label">Этажность здания: </label>
+        <label for="storeys" class="col-md-2 col-form-label">Этажность: </label>
         <div class="col-md-10">
             <InputNumber id="storeys" class="form-control" @bind-Value="_realty.Storeys" />
         </div>
@@ -78,7 +75,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="city" class="col-md-2 col-form-label">Город: </label>
+        <label for="city" class="col-md-2 col-form-label">Адрес: </label>
         <div class="col-md-10">
             <InputSelect id="city" class="form-control" @bind-Value="_realty.CityId">
                 @foreach (var city in _citiesList)

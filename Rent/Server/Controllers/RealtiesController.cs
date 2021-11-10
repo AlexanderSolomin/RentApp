@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +55,7 @@ namespace Rent.Server.Controllers
         }
 
         // GET: 
+        [Authorize]
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult> GetRealtyById(Guid id)
         {
@@ -73,6 +73,7 @@ namespace Rent.Server.Controllers
         }
 
         // POST: 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Realty>> AddRealty(Realty realty)
         {
@@ -96,6 +97,7 @@ namespace Rent.Server.Controllers
         }
 
         // PUT:
+        [Authorize]
         [HttpPut("{id:Guid}")]
         public async Task<ActionResult<Realty>> PutRealty(Guid id, [FromBody]Realty realty)
         {
@@ -123,6 +125,7 @@ namespace Rent.Server.Controllers
         }
 
         // DELETE:
+        [Authorize]
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult> DeleteRealty(Guid id)
         {

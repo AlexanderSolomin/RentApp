@@ -1,5 +1,5 @@
 ﻿@inject IFileReaderService FileReaderService
-@inject ICitiesService CitiesService
+@inject IRealtiesService RealtiesService
 
 <InputFile OnChange="@HandleSelected" multiple />
 @if (ImgUrl != null)
@@ -30,7 +30,7 @@
                     var content = new MultipartFormDataContent();
                     content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
                     content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "image", imageFile.Name);
-                    ImgUrl = await CitiesService.UploadImage(content);
+                    ImgUrl = await RealtiesService.UploadImage(content);
                     await OnChange.InvokeAsync(ImgUrl);
                 }
             }
